@@ -182,6 +182,11 @@ namespace TalusSettings.Editor
 
         private bool IsCollectionValid(SceneCollection collection)
         {
+            if (collection == null)
+            {
+                return false;
+            }
+
             int badSceneReferenceCount = 0;
             collection.ForEach(sceneReference => {
                 if (sceneReference.IsEmpty)
@@ -190,7 +195,7 @@ namespace TalusSettings.Editor
                 }
             });
 
-            return collection != null && collection.Count > 0 && badSceneReferenceCount == 0;
+            return collection.Count > 0 && badSceneReferenceCount == 0;
         }
 
         private static void SaveAssets()
