@@ -2,9 +2,9 @@
     "name": "TalusSettings.Editor",
     "rootNamespace": "",
     "references": [
+        "TalusFramework",
         "TalusBackendData.Editor",
-        "TalusElephant",
-        "TalusFramework"
+        "TalusElephant"
     ],
     "includePlatforms": [
         "Editor"
