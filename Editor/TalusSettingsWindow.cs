@@ -189,7 +189,7 @@ namespace TalusSettings.Editor
 
             int badSceneReferenceCount = 0;
             collection.ForEach(sceneReference => {
-                if (sceneReference.IsEmpty)
+                if (sceneReference == null || sceneReference.IsEmpty)
                 {
                     ++badSceneReferenceCount;
                 }
