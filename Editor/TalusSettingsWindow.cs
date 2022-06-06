@@ -21,7 +21,7 @@ namespace TalusSettings.Editor
         private const string _ElephantScenePath = "Assets/Scenes/Template_Persistent/elephant_scene.unity";
 #endif
 
-        private const string _ForwarderScenePath = "Assets/Scenes/Template_Persistent/ForwarderScene.unity";
+        private const string _ForwarderScenePath = "Assets/Scenes/Template_Persistent/Scene_Forwarder.unity";
 
 #if ENABLE_BACKEND
         [BoxGroup("Base Settings", Order = 0, CenterLabel = true)]
