@@ -5,8 +5,8 @@
         "TalusSettings.Definitions",
         "TalusSettings.Backend",
         "TalusFramework",
-        "TalusBackendData.Editor",
-        "TalusElephant"
+        "TalusElephant",
+        "TalusBackendData.Editor"
     ],
     "includePlatforms": [
         "Editor"
