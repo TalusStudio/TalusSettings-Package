@@ -45,7 +45,7 @@ namespace TalusSettings.Editor
 
         [DisableInPlayMode]
         [PropertySpace(10)]
-        [Button(ButtonSizes.Large), GUIColor(0f, 1f, 0f)]
+        [Button(ButtonSizes.Gigantic), GUIColor(0f, 1f, 0f)]
         public void UpdateProjectSettings()
         {
             BackendApi api = new BackendApi(BackendSettings.ApiUrl, BackendSettings.ApiToken);
@@ -74,6 +74,7 @@ namespace TalusSettings.Editor
             else
             {
                 var window = GetWindow<TalusSettingsWindow>();
+                window.minSize = new Vector2(500, 400);
                 window.Show();
             }
         }
