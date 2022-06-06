@@ -1,4 +1,4 @@
-# TalusSettings Package
+# 🔨 TalusSettings Package
 
 # 💿 Installation
 - In Unity, 
