@@ -26,32 +26,34 @@ namespace TalusSettings.Editor.Definitons
             EditorUtility.SetDirty(FacebookSettings.Instance);
             SaveAssets();
 
-            Debug.Log($"[TalusSettings-Package] Facebook SDK settings updated! fb_app_id: {app.fb_app_id}");
+            if (string.IsNullOrEmpty(app.fb_app_id))
+            {
+                Debug.LogWarning("[TalusSettings-Package] Facebook App_ID is empty!");
+            }
         }
 
         public static void UpdateElephantAsset(AppModel app)
         {
-            ElephantSettings elephantSettings = Resources.Load<ElephantSettings>("ElephantSettings");
-            if (elephantSettings != null)
-            {
-                elephantSettings.GameID = app.elephant_id;
-                elephantSettings.GameSecret = app.elephant_secret;
-                EditorUtility.SetDirty(elephantSettings);
-                SaveAssets();
-
-                if (string.IsNullOrEmpty(app.elephant_id))
-                {
-                    Debug.LogWarning("[TalusSettings-Package] Elephant Game_ID is empty!");
-                }
-
-                if (string.IsNullOrEmpty(app.elephant_secret))
-                {
-                    Debug.LogWarning("[TalusSettings-Package] Elephant Game_Secret is empty!");
-                }
-            }
-            else
+            ElephantSettings elephantSettings = Resources.Load<ElephantSettings>(TalusSettingsDefinitions.ElephantAssetName);
+            if (elephantSettings == null)
             {
                 Debug.LogError("[TalusSettings-Package] Elephant Settings can not found!");
+                return;
+            }
+
+            elephantSettings.GameID = app.elephant_id;
+            elephantSettings.GameSecret = app.elephant_secret;
+            EditorUtility.SetDirty(elephantSettings);
+            SaveAssets();
+
+            if (string.IsNullOrEmpty(app.elephant_id))
+            {
+                Debug.LogWarning("[TalusSettings-Package] Elephant Game_ID is empty!");
+            }
+
+            if (string.IsNullOrEmpty(app.elephant_secret))
+            {
+                Debug.LogWarning("[TalusSettings-Package] Elephant Game_Secret is empty!");
             }
         }
 
@@ -95,27 +97,26 @@ namespace TalusSettings.Editor.Definitons
         {
             if (FacebookSettings.NullableInstance != null) { return; }
 
-            string fullPath = GetAssetPath("FacebookSettings.asset");
+            string fullPath = GetKeyPath($"{ TalusSettingsDefinitions.FacebookAssetName}.asset");
             AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<FacebookSettings>(), fullPath);
             SaveAssets();
 
-            Debug.Log("[TalusSettings-Package] Facebook Settings created!");
+            Debug.Log($"[TalusSettings-Package] {fullPath} created!");
         }
 
         private static void CreateElephantAsset()
         {
-            ElephantSettings settings = Resources.Load<ElephantSettings>("ElephantSettings");
-            if (settings == null)
-            {
-                string fullPath = GetAssetPath("ElephantSettings.asset");
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<ElephantSettings>(), AssetDatabase.GenerateUniqueAssetPath(fullPath));
-                SaveAssets();
+            ElephantSettings settings = Resources.Load<ElephantSettings>(TalusSettingsDefinitions.ElephantAssetName);
+            if (settings != null) { return; }
 
-                Debug.Log("[TalusSettings-Package] Elephant Settings created!");
-            }
+            string fullPath = GetKeyPath($"{TalusSettingsDefinitions.ElephantAssetName}.asset");
+            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<ElephantSettings>(), AssetDatabase.GenerateUniqueAssetPath(fullPath));
+            SaveAssets();
+
+            Debug.Log($"[TalusSettings-Package] {fullPath} created!");
         }
 
-        private static string GetAssetPath(string asset)
+        private static string GetKeyPath(string asset)
         {
             return Path.Combine(Path.Combine(TalusSettingsDefinitions.BasePath, TalusSettingsDefinitions.KeysFolder), asset);
         }
