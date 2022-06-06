@@ -3,9 +3,15 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
+
 using TalusBackendData.Editor;
 using TalusBackendData.Editor.User;
 using TalusBackendData.Editor.Models;
+
+using TalusFramework.Utility;
+using TalusFramework.Collections;
 
 #if ENABLE_BACKEND
 using Path = System.IO.Path;
@@ -14,42 +20,57 @@ using FacebookSettings = Facebook.Unity.Settings.FacebookSettings;
 
 namespace TalusSettings.Editor
 {
-    internal static class AppInfo
+    public class TalusSettingsWindow : OdinEditorWindow
     {
-#if ENABLE_BACKEND
-        private static readonly string _elephantScenePath = "Assets/Scenes/Template_Persistent/elephant_scene.unity";
-#endif
-        private static readonly string _forwarderScenePath = "Assets/Scenes/Template_Persistent/ForwarderScene.unity";
+        [Header("Build Settings")]
+        [LabelWidth(100)]
+        [EnableIf("@IsBackendActive() == true")]
+        [ValidateInput("HasValidReference", "elephant_scene is required!")]
+        public SceneReference ElephantScene;
 
+        [LabelWidth(100)]
+        [ValidateInput("HasValidReference", "ForwarderScene is required!")]
+        public SceneReference ForwarderScene;
 
-        [MenuItem("TalusKit/Backend/Fetch App Info", false, 10001)]
-        public static void FetchAppInfo()
+        [LabelWidth(100)]
+        [Required]
+        public SceneCollection LevelCollection;
+
+        [DisableInPlayMode]
+        [PropertySpace(8)]
+        [Button(ButtonSizes.Large), GUIColor(0f, 1f, 0f)]
+        public void UpdateProjectSettings()
+        {
+            BackendApi api = new BackendApi(BackendSettings.ApiUrl, BackendSettings.ApiToken);
+            api.GetAppInfo(BackendSettings.AppId, UpdateBackendData);
+        }
+
+        [MenuItem("TalusKit/Backend/Project Settings", false, 10001)]
+        private static void OpenWindow()
         {
             if (string.IsNullOrEmpty(BackendSettings.ApiUrl))
             {
-                Debug.LogError("ApiUrl can not be empty! (Edit/Preferences/Talus/Backend Settings)");
+                Debug.LogError("ApiUrl can not be empty! (Edit/Project Settings/Talus Studio/Backend Settings)");
             }
             else if (string.IsNullOrEmpty(BackendSettings.ApiToken))
             {
-                Debug.LogError("ApiToken can not be empty! (Edit/Preferences/Talus/Backend Settings)");
+                Debug.LogError("ApiToken can not be empty! (Edit/Project Settings/Talus Studio/Backend Settings)");
             }
             else if (string.IsNullOrEmpty(BackendSettings.AppId))
             {
-                Debug.LogError("AppId can not be empty! (Edit/Preferences/Talus/Backend Settings)");
+                Debug.LogError("AppId can not be empty! (Edit/Project Settings/Talus Studio/Backend Settings)");
             }
             else
             {
-                new BackendApi(BackendSettings.ApiUrl, BackendSettings.ApiToken)
-                    .GetAppInfo(BackendSettings.AppId, UpdateBackendData);
-
-                Debug.Log("Fetching app info...");
+                var window = GetWindow<TalusSettingsWindow>();
+                window.Show();
             }
         }
 
-        private static void UpdateBackendData(AppModel app)
+        private void UpdateBackendData(AppModel app)
         {
-            UpdateProductSettings(app);
             UpdateBuildSettings();
+            UpdateProductSettings(app);
 
 #if ENABLE_BACKEND
             UpdateFacebookAsset(app);
@@ -57,7 +78,7 @@ namespace TalusSettings.Editor
 #endif
         }
 
-        private static void UpdateProductSettings(AppModel app)
+        private void UpdateProductSettings(AppModel app)
         {
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, app.app_bundle);
             PlayerSettings.productName = app.app_name;
@@ -66,14 +87,16 @@ namespace TalusSettings.Editor
             Debug.Log("Product Name and Bundle ID updated!");
         }
 
-        private static void UpdateBuildSettings()
+        private void UpdateBuildSettings()
         {
             var scenes = new List<EditorBuildSettingsScene>();
 
 #if ENABLE_BACKEND
-            scenes.Add(new EditorBuildSettingsScene(_elephantScenePath, true));
+            scenes.Add(new EditorBuildSettingsScene(ElephantScene.ScenePath, true));
 #endif
-            scenes.Add(new EditorBuildSettingsScene(_forwarderScenePath, true));
+            scenes.Add(new EditorBuildSettingsScene(ForwarderScene.ScenePath, true));
+
+            LevelCollection.ForEach(level => scenes.Add(new EditorBuildSettingsScene(level.ScenePath, true)));
 
             EditorBuildSettings.scenes = scenes.ToArray();
             SaveAssets();
@@ -176,6 +199,20 @@ namespace TalusSettings.Editor
         {
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        private static bool IsBackendActive()
+        {
+#if ENABLE_BACKEND
+            return true;
+#else
+            return false;
+#endif
+        }
+
+        private bool HasValidReference(SceneReference scene)
+        {
+            return !scene.IsEmpty;
         }
     }
 }

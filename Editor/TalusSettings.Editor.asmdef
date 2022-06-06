@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "TalusBackendData.Editor",
-        "TalusElephant"
+        "TalusElephant",
+        "TalusFramework"
     ],
     "includePlatforms": [
         "Editor"
@@ -12,7 +13,10 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "Facebook.Unity.Settings.dll"
+        "Facebook.Unity.Settings.dll",
+        "Sirenix.OdinInspector.Editor.dll",
+        "Sirenix.OdinInspector.Attributes.dll",
+        "Sirenix.Serialization.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
