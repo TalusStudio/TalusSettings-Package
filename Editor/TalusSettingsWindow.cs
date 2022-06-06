@@ -22,26 +22,29 @@ namespace TalusSettings.Editor
 {
     public class TalusSettingsWindow : OdinEditorWindow
     {
-        [BoxGroup("Build Settings", CenterLabel = true)]
+        [Title("Level Settings")]
         [LabelWidth(100)]
         [EnableIf("@IsBackendActive() == true")]
         [ValidateInput("HasSceneValidReference", "elephant_scene is required!")]
         public SceneReference ElephantScene;
 
-        [BoxGroup("Build Settings", CenterLabel = true)]
         [LabelWidth(100)]
         [ValidateInput("HasSceneValidReference", "ForwarderScene is required!")]
         public SceneReference ForwarderScene;
 
-        [BoxGroup("Build Settings", CenterLabel = true)]
         [LabelWidth(100)]
         [Required]
         public SceneCollection LevelCollection;
 
-        [BoxGroup("App Settings", CenterLabel = true)]
+        [Title("App Settings", "Get App_ID from http://34.252.141.173/dashboard")]
         [LabelWidth(100)]
-        [Required]
-        public string AppId;
+        [ShowInInspector, Required]
+        [InlineButton("OpenDashboard")]
+        public string AppId
+        {
+            get { return EditorPrefs.GetString(BackendDefinitions.BackendAppIdPref); }
+            set { EditorPrefs.SetString(BackendDefinitions.BackendAppIdPref, value); }
+        }
 
         [DisableInPlayMode]
         [PropertySpace(8)]
@@ -50,6 +53,11 @@ namespace TalusSettings.Editor
         {
             BackendApi api = new BackendApi(BackendSettings.ApiUrl, BackendSettings.ApiToken);
             api.GetAppInfo(AppId, UpdateBackendData);
+        }
+
+        private static void OpenDashboard()
+        {
+            Application.OpenURL("http://34.252.141.173/dashboard");
         }
 
         [MenuItem("TalusKit/Backend/Project Settings", false, 10001)]
