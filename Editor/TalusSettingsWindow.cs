@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 using UnityEditor;
 using UnityEngine;
@@ -21,15 +20,15 @@ namespace TalusSettings.Editor
         [Title("Scene Settings")]
         [LabelWidth(120)]
         [EnableIf(nameof(IsBackendActive))]
-        [ValidateInput(nameof(HasSceneValidReference), nameof(ElephantScene) + " is required!")]
+        [ValidateInput(nameof(IsSceneValid), nameof(ElephantScene) + " is required!")]
         public SceneReference ElephantScene;
 
         [LabelWidth(120)]
-        [ValidateInput(nameof(HasSceneValidReference), nameof(ForwarderScene) + " is required!")]
+        [ValidateInput(nameof(IsSceneValid), nameof(ForwarderScene) + " is required!")]
         public SceneReference ForwarderScene;
 
         [LabelWidth(120)]
-        [ValidateInput(nameof(HasCollectionValid), nameof(LevelCollection) + " is not valid!", ContinuousValidationCheck = true)]
+        [ValidateInput(nameof(IsCollectionValid), nameof(LevelCollection) + " is not valid!", ContinuousValidationCheck = true)]
         public SceneCollection LevelCollection;
 
         [Title("App Settings")]
@@ -48,6 +47,41 @@ namespace TalusSettings.Editor
         [Button(ButtonSizes.Gigantic), GUIColor(0f, 1f, 0f)]
         public void UpdateProjectSettings()
         {
+#if ENABLE_BACKEND
+            if (ElephantScene == null || ElephantScene.IsEmpty)
+            {
+                InfoBox.Create(
+                    "TalusSettings - Package | Error!",
+                    $"{nameof(ElephantScene)} cannot be null!",
+                    "OK, I understand"
+                );
+
+                return;
+            }
+#endif
+
+            if (ForwarderScene == null || ForwarderScene.IsEmpty)
+            {
+                InfoBox.Create(
+                    "TalusSettings - Package | Error!",
+                    $"{nameof(ForwarderScene)} cannot be null!",
+                    "OK, I understand"
+                );
+
+                return;
+            }
+
+            if (!IsCollectionValid(LevelCollection))
+            {
+                InfoBox.Create(
+                    "TalusSettings - Package | Error!",
+                    $"There is/are invalid scene reference(s) in {nameof(LevelCollection)}.",
+                    "OK, I understand"
+                );
+
+                return;
+            }
+
             BackendApi api = new BackendApi(BackendSettings.ApiUrl, BackendSettings.ApiToken);
             api.GetAppInfo(AppId, UpdateBackendData);
         }
@@ -57,27 +91,23 @@ namespace TalusSettings.Editor
         {
             if (string.IsNullOrEmpty(BackendSettings.ApiUrl))
             {
-                if (EditorUtility.DisplayDialog(
+                InfoBox.Create(
                     "TalusSettings-Package | Error!",
                     "'Api URL' can not be empty!\n\n(Edit/Project Settings/Talus Studio/Backend Settings)",
                     "Open Settings",
-                    "Close"
-                ))
-                {
-                    SettingsService.OpenProjectSettings(BackendSettings.Path);
-                }
+                    "Close",
+                    () => SettingsService.OpenProjectSettings(BackendSettings.Path)
+                );
             }
             else if (string.IsNullOrEmpty(BackendSettings.ApiToken))
             {
-                if (EditorUtility.DisplayDialog(
+                InfoBox.Create(
                     "TalusSettings-Package | Error!",
                     "'Api Token' can not be empty!\n\n(Edit/Project Settings/Talus Studio/Backend Settings)",
                     "Open Settings",
-                    "Close"
-                ))
-                {
-                    SettingsService.OpenProjectSettings(BackendSettings.Path);
-                }
+                    "Close",
+                    () => SettingsService.OpenProjectSettings(BackendSettings.Path)
+                );
             }
             else
             {
@@ -101,6 +131,12 @@ namespace TalusSettings.Editor
             TalusSettingsProvider.UpdateFacebookAsset(app);
             TalusSettingsProvider.UpdateElephantAsset(app);
 #endif
+
+            InfoBox.Create(
+                "TalusSettings-Package | Success!",
+                $"App settings updated!\n\n{app}",
+                "OK"
+            );
         }
 
         private void UpdateProductSettings(AppModel app)
@@ -109,8 +145,6 @@ namespace TalusSettings.Editor
             PlayerSettings.productName = app.app_name;
 
             SaveAssets();
-
-            Debug.Log("[TalusSettings-Package] Product Name and Bundle ID updated!");
         }
 
         private void UpdateSceneSettings()
@@ -128,22 +162,36 @@ namespace TalusSettings.Editor
             }
 
             EditorBuildSettings.scenes = scenes.ToArray();
-
             SaveAssets();
-
-            Debug.Log("[TalusSettings-Package] Scene settings updated!");
         }
 
 
-        #region VALIDATIONS
-        private static bool IsBackendActive() => PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS)
-            .Split(';')
-            .ToList()
-            .Contains(BackendDefinitions.BackendSymbol);
+        private static bool IsBackendActive()
+        {
+#if ENABLE_BACKEND
+            return true;
+#else
+            return false;
+#endif
+        }
 
-        private bool HasSceneValidReference(SceneReference scene) => scene != null && !scene.IsEmpty;
-        private bool HasCollectionValid(SceneCollection collection) => collection != null && collection.Count > 0 && !collection[0].IsEmpty;
-        #endregion
+        private bool IsSceneValid(SceneReference scene)
+        {
+            return scene != null && !scene.IsEmpty;
+        }
+
+        private bool IsCollectionValid(SceneCollection collection)
+        {
+            int badSceneReferenceCount = 0;
+            collection.ForEach(sceneReference => {
+                if (sceneReference.IsEmpty)
+                {
+                    ++badSceneReferenceCount;
+                }
+            });
+
+            return collection != null && collection.Count > 0 && badSceneReferenceCount == 0;
+        }
 
         private static void SaveAssets()
         {
