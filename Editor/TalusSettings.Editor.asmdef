@@ -15,8 +15,7 @@
     "precompiledReferences": [
         "Facebook.Unity.Settings.dll",
         "Sirenix.OdinInspector.Editor.dll",
-        "Sirenix.OdinInspector.Attributes.dll",
-        "Sirenix.Serialization.dll"
+        "Sirenix.OdinInspector.Attributes.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
