@@ -85,7 +85,7 @@ namespace TalusSettings.Editor
 
         private void UpdateBackendData(AppModel app)
         {
-            UpdateBuildSettings();
+            UpdateSceneSettings();
             UpdateProductSettings(app);
 
 #if ENABLE_BACKEND
@@ -101,10 +101,10 @@ namespace TalusSettings.Editor
 
             SaveAssets();
 
-            Debug.Log("Product Name and Bundle ID updated!");
+            Debug.Log("[TalusSettings-Package] Product Name and Bundle ID updated!");
         }
 
-        private void UpdateBuildSettings()
+        private void UpdateSceneSettings()
         {
             var scenes = new List<EditorBuildSettingsScene>();
 
@@ -113,18 +113,24 @@ namespace TalusSettings.Editor
 #endif
             scenes.Add(new EditorBuildSettingsScene(ForwarderScene.ScenePath, true));
 
-            LevelCollection.ForEach(level => scenes.Add(new EditorBuildSettingsScene(level.ScenePath, true)));
+            for (int i = 0; i < LevelCollection.Count; ++i)
+            {
+                scenes.Add(new EditorBuildSettingsScene(LevelCollection[i].ScenePath, true));
+            }
 
             EditorBuildSettings.scenes = scenes.ToArray();
+
             SaveAssets();
+
+            Debug.Log("[TalusSettings-Package] Scene settings updated!");
         }
 
 
-#region VALIDATIONS
+        #region VALIDATIONS
         private static bool IsBackendActive() => PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS)
             .Split(';')
             .ToList()
-            .Contains("ENABLE_BACKEND");
+            .Contains(BackendDefinitions.BackendSymbol);
 
         private bool HasSceneValidReference(SceneReference scene) => scene != null && !scene.IsEmpty;
         private bool HasCollectionValid(SceneCollection collection) => collection != null && collection.Count > 0 && !collection[0].IsEmpty;
