@@ -75,7 +75,7 @@ namespace TalusSettings.Editor
             if (!IsSceneValid(ElephantScene))
             {
                 InfoBox.Create(
-                    "TalusSettings - Package | Error!",
+                    "TalusSettings - Package | Error !",
                     $"{nameof(ElephantScene)} cannot be null!",
                     "OK, I understand"
                 );
@@ -87,7 +87,7 @@ namespace TalusSettings.Editor
             if (!IsSceneValid(ForwarderScene))
             {
                 InfoBox.Create(
-                    "TalusSettings - Package | Error!",
+                    "TalusSettings - Package | Error !",
                     $"{nameof(ForwarderScene)} cannot be null!",
                     "OK, I understand"
                 );
@@ -98,7 +98,7 @@ namespace TalusSettings.Editor
             if (!IsCollectionValid(LevelCollection))
             {
                 InfoBox.Create(
-                    "TalusSettings - Package | Error!",
+                    "TalusSettings - Package | Error !",
                     $"There is/are invalid scene reference(s) in {nameof(LevelCollection)}.",
                     "OK, I understand"
                 );
@@ -125,7 +125,7 @@ namespace TalusSettings.Editor
             if (string.IsNullOrEmpty(BackendSettings.ApiUrl))
             {
                 InfoBox.Create(
-                    "TalusSettings-Package | Error!",
+                    "TalusSettings-Package | Error !",
                     "'Api URL' can not be empty!\n\n(Edit/Project Settings/Talus Studio/Backend Settings)",
                     "Open Settings",
                     "Close",
@@ -135,7 +135,7 @@ namespace TalusSettings.Editor
             else if (string.IsNullOrEmpty(BackendSettings.ApiToken))
             {
                 InfoBox.Create(
-                    "TalusSettings-Package | Error!",
+                    "TalusSettings-Package | Error !",
                     "'Api Token' can not be empty!\n\n(Edit/Project Settings/Talus Studio/Backend Settings)",
                     "Open Settings",
                     "Close",
@@ -166,7 +166,7 @@ namespace TalusSettings.Editor
 #endif
 
             InfoBox.Create(
-                "TalusSettings-Package | Success!",
+                "TalusSettings-Package | Success !",
                 $"App settings updated!\n\n{app}",
                 "OK"
             );
