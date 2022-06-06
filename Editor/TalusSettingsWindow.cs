@@ -45,7 +45,7 @@ namespace TalusSettings.Editor
 
         private SceneReference _ForwarderScene;
 
-        [BoxGroup("Base Settings")]
+        [BoxGroup("Base Settings", Order = 0, CenterLabel = true)]
         [LabelWidth(100)]
         [ValidateInput(nameof(IsSceneValid), nameof(ForwarderScene) + " is required!")]
         [ShowInInspector]
