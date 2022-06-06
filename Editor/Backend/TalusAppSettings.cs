@@ -10,19 +10,8 @@ using TalusBackendData.Editor.Models;
 
 namespace TalusSettings.Editor.Backend
 {
-    public static class TalusSettingsProvider
+    public static class TalusAppSettings
     {
-        // elephant settings path to copy elephant scene
-        public const string ElephantScenePath = "Packages/com.talus.taluselephant/";
-        public const string ElephantAssetPath = "Packages/com.talus.taluselephant/UI/Textures/Resources/";
-
-        // copied elephant scene path.
-        public static string CopiedElephantScenePath => Application.dataPath + "/Scenes/Template_Persistent";
-
-        // fb settings and elephant settings path.
-        public const string KeysParentFolder = "Assets";
-        public const string KeysFolder = "Resources";
-
         public static void UpdateFacebookAsset(AppModel app)
         {
             if (FacebookSettings.NullableInstance == null)
@@ -74,7 +63,7 @@ namespace TalusSettings.Editor.Backend
             EditorApplication.delayCall += () =>
             {
                 CopyElephantScene();
-                CreateFolderIfNotExists(KeysFolder, KeysParentFolder);
+                CreateFolderIfNotExists(TalusSettingsDefinitions.KeysFolder, TalusSettingsDefinitions.KeysParentFolder);
                 CreateFacebookAsset();
                 CreateElephantAsset();
             };
@@ -85,12 +74,12 @@ namespace TalusSettings.Editor.Backend
             try
             {
                 FileUtil.CopyFileOrDirectory(
-                    Path.Combine(ElephantScenePath, "elephant_scene.unity"),
-                    Path.Combine(CopiedElephantScenePath, "elephant_scene.unity")
+                    Path.Combine(TalusSettingsDefinitions.ElephantScenePath, "elephant_scene.unity"),
+                    Path.Combine(TalusSettingsDefinitions.CopiedElephantScenePath, "elephant_scene.unity")
                 );
 
                 SaveAssets();
-                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {CopiedElephantScenePath}");
+                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {TalusSettingsDefinitions.CopiedElephantScenePath}");
             }
             catch (Exception)
             {
@@ -131,7 +120,7 @@ namespace TalusSettings.Editor.Backend
 
         private static string GetAssetPath(string asset)
         {
-            return Path.Combine(Path.Combine(KeysParentFolder, KeysFolder), asset);
+            return Path.Combine(Path.Combine(TalusSettingsDefinitions.KeysParentFolder, TalusSettingsDefinitions.KeysFolder), asset);
         }
 
         private static void SaveAssets()

@@ -2,6 +2,7 @@
     "name": "TalusSettings.Editor",
     "rootNamespace": "",
     "references": [
+        "TalusSettings.Definitions",
         "TalusSettings.Backend",
         "TalusFramework",
         "TalusBackendData.Editor",

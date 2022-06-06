@@ -13,34 +13,40 @@ using TalusBackendData.Editor.Models;
 using TalusFramework.Utility;
 using TalusFramework.Collections;
 
+#if ENABLE_BACKEND
+using TalusAppSettings = TalusSettings.Editor.Backend.TalusAppSettings;
+#endif
+
 namespace TalusSettings.Editor
 {
     public class TalusSettingsWindow : OdinEditorWindow
     {
 #if ENABLE_BACKEND
-        private const string _ElephantScenePath = "Assets/Scenes/Template_Persistent/elephant_scene.unity";
-#endif
+        private SceneReference _ElephantScene;
 
-        private const string _ForwarderScenePath = "Assets/Scenes/Template_Persistent/Scene_Forwarder.unity";
-
-#if ENABLE_BACKEND
         [BoxGroup("Base Settings", Order = 0, CenterLabel = true)]
         [LabelWidth(100)]
         [ValidateInput(nameof(IsSceneValid), nameof(ElephantScene) + " is required!")]
         [ShowInInspector]
+        [HideReferenceObjectPicker]
         public SceneReference ElephantScene
         {
-            get { return new SceneReference(_ElephantScenePath); }
+            get { return _ElephantScene; }
+            set { _ElephantScene = value.Clone(); }
         }
 #endif
+
+        private SceneReference _ForwarderScene;
 
         [BoxGroup("Base Settings")]
         [LabelWidth(100)]
         [ValidateInput(nameof(IsSceneValid), nameof(ForwarderScene) + " is required!")]
         [ShowInInspector]
+        [HideReferenceObjectPicker]
         public SceneReference ForwarderScene
         {
-            get { return new SceneReference(_ForwarderScenePath); }
+            get { return _ForwarderScene; }
+            set { _ForwarderScene = value.Clone(); }
         }
 
         [BoxGroup("Game Settings", Order = 1, CenterLabel = true)]
@@ -104,6 +110,15 @@ namespace TalusSettings.Editor
             api.GetAppInfo(AppId, UpdateBackendData);
         }
 
+        [OnInspectorInit]
+        private void InitWindow()
+        {
+#if ENABLE_BACKEND
+            _ElephantScene = new SceneReference(TalusSettingsDefinitions.ElephantScenePath);
+#endif
+            _ForwarderScene = new SceneReference(TalusSettingsDefinitions.ForwarderScenePath);
+        }
+
         [MenuItem("TalusKit/Backend/App Settings", false, 10001)]
         private static void OpenWindow()
         {
@@ -130,7 +145,7 @@ namespace TalusSettings.Editor
             else
             {
                 var window = GetWindow<TalusSettingsWindow>();
-                window.minSize = new Vector2(400, 320);
+                window.minSize = new Vector2(400, 400);
                 window.Show();
             }
         }
@@ -146,8 +161,8 @@ namespace TalusSettings.Editor
             UpdateProductSettings(app);
 
 #if ENABLE_BACKEND
-            TalusSettingsProvider.UpdateFacebookAsset(app);
-            TalusSettingsProvider.UpdateElephantAsset(app);
+            TalusAppSettings.UpdateFacebookAsset(app);
+            TalusAppSettings.UpdateElephantAsset(app);
 #endif
 
             InfoBox.Create(
