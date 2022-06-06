@@ -30,7 +30,7 @@ namespace TalusSettings.Editor.Definitons
             EditorUtility.SetDirty(FacebookSettings.Instance);
             SaveAssets();
 
-            if (string.IsNullOrEmpty(app.fb_app_id)) { Debug.LogWarning("[TalusSettings-Package] Facebook App_ID is empty!"); }
+            if (string.IsNullOrEmpty(app.fb_app_id)) { Debug.LogWarning("[TalusSettings-Package] Fb_App_Id is empty!"); }
         }
 
         public static void UpdateElephantAsset(AppModel app)
@@ -58,11 +58,18 @@ namespace TalusSettings.Editor.Definitons
 
             EditorApplication.delayCall += () =>
             {
-                CreateFolderIfNotExists(TalusSettingsDefinitions.KeysFolder, TalusSettingsDefinitions.BasePath);
+                CreateKeysFolder(TalusSettingsDefinitions.KeysFolder, TalusSettingsDefinitions.BasePath);
                 CopyElephantScene();
                 CreateFacebookAsset();
                 CreateElephantAsset();
             };
+        }
+
+        private static void CreateKeysFolder(string folderName, string parent)
+        {
+            if (AssetDatabase.IsValidFolder(Path.Combine(parent, folderName))) { return; }
+
+            AssetDatabase.CreateFolder(parent, folderName);
         }
 
         private static void CopyElephantScene()
@@ -80,18 +87,11 @@ namespace TalusSettings.Editor.Definitons
             }
         }
 
-        private static void CreateFolderIfNotExists(string folderName, string parent)
-        {
-            if (AssetDatabase.IsValidFolder(Path.Combine(parent, folderName))) { return; }
-
-            AssetDatabase.CreateFolder(parent, folderName);
-        }
-
         private static void CreateFacebookAsset()
         {
             if (FacebookSettings.NullableInstance != null) { return; }
 
-            string fullPath = GetKeyPath($"{ TalusSettingsDefinitions.FacebookAssetName}.asset");
+            string fullPath = TalusSettingsDefinitions.GetKeyPath($"{ TalusSettingsDefinitions.FacebookAssetName}.asset");
             AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<FacebookSettings>(), fullPath);
             SaveAssets();
 
@@ -103,16 +103,11 @@ namespace TalusSettings.Editor.Definitons
             ElephantSettings settings = Resources.Load<ElephantSettings>(TalusSettingsDefinitions.ElephantAssetName);
             if (settings != null) { return; }
 
-            string fullPath = GetKeyPath($"{TalusSettingsDefinitions.ElephantAssetName}.asset");
+            string fullPath = TalusSettingsDefinitions.GetKeyPath($"{TalusSettingsDefinitions.ElephantAssetName}.asset");
             AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<ElephantSettings>(), AssetDatabase.GenerateUniqueAssetPath(fullPath));
             SaveAssets();
 
             Debug.Log($"[TalusSettings-Package] {fullPath} created!");
-        }
-
-        private static string GetKeyPath(string asset)
-        {
-            return Path.Combine(Path.Combine(TalusSettingsDefinitions.BasePath, TalusSettingsDefinitions.KeysFolder), asset);
         }
 
         private static void SaveAssets()

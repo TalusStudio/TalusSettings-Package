@@ -16,6 +16,8 @@ namespace TalusSettings.Editor
         public static readonly string ElephantAssetName = "ElephantSettings";
         public static readonly string FacebookAssetName = "FacebookSettings";
 
+        public static string GetKeyPath(string asset) => Path.Combine(Path.Combine(BasePath, KeysFolder), asset);
+
         // elephant package path
         public static readonly string ElephantPackagePath = "Packages/com.talus.taluselephant";
         public static string ElephantPackageScenePath => Path.Combine(ElephantPackagePath, "elephant_scene.unity");
