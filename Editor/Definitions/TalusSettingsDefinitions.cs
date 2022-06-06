@@ -5,16 +5,15 @@ namespace TalusSettings.Editor
     public static class TalusSettingsDefinitions
     {
         // reference to assets path
-        private static string BasePath => "Assets";
+        public static string BasePath => "Assets";
+
+        // backend keys path
+        public static readonly string KeysFolder = "Resources";
 
         // elephant package path
         public static readonly string ElephantPackagePath = "Packages/com.talus.taluselephant";
         public static string ElephantPackageScenePath => Path.Combine(ElephantPackagePath, "elephant_scene.unity");
         public static string ElephantPackageAssetPath => Path.Combine(ElephantPackagePath, "UI/Textures/Resources");
-
-        // backend keys path
-        public static readonly string KeysParentFolder = "Assets";
-        public static readonly string KeysFolder = "Resources";
 
         // scenes path
         public static string PersistentScenesPath => Path.Combine(BasePath, "Scenes/Template_Persistent");

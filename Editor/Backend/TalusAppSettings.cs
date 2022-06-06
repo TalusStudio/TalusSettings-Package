@@ -8,7 +8,7 @@ using Facebook.Unity.Settings;
 
 using TalusBackendData.Editor.Models;
 
-namespace TalusSettings.Editor.Backend
+namespace TalusSettings.Editor.Definitons
 {
     public static class TalusAppSettings
     {
@@ -63,7 +63,7 @@ namespace TalusSettings.Editor.Backend
             EditorApplication.delayCall += () =>
             {
                 CopyElephantScene();
-                CreateFolderIfNotExists(TalusSettingsDefinitions.KeysFolder, TalusSettingsDefinitions.KeysParentFolder);
+                CreateFolderIfNotExists(TalusSettingsDefinitions.KeysFolder, TalusSettingsDefinitions.BasePath);
                 CreateFacebookAsset();
                 CreateElephantAsset();
             };
@@ -117,7 +117,7 @@ namespace TalusSettings.Editor.Backend
 
         private static string GetAssetPath(string asset)
         {
-            return Path.Combine(Path.Combine(TalusSettingsDefinitions.KeysParentFolder, TalusSettingsDefinitions.KeysFolder), asset);
+            return Path.Combine(Path.Combine(TalusSettingsDefinitions.BasePath, TalusSettingsDefinitions.KeysFolder), asset);
         }
 
         private static void SaveAssets()

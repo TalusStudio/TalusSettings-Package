@@ -14,7 +14,7 @@ using TalusFramework.Utility;
 using TalusFramework.Collections;
 
 #if ENABLE_BACKEND
-using TalusAppSettings = TalusSettings.Editor.Backend.TalusAppSettings;
+using TalusAppSettings = TalusSettings.Editor.Definitons.TalusAppSettings;
 #endif
 
 namespace TalusSettings.Editor
