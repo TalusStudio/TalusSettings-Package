@@ -73,13 +73,10 @@ namespace TalusSettings.Editor.Backend
         {
             try
             {
-                FileUtil.CopyFileOrDirectory(
-                    Path.Combine(TalusSettingsDefinitions.ElephantScenePath, "elephant_scene.unity"),
-                    Path.Combine(TalusSettingsDefinitions.CopiedElephantScenePath, "elephant_scene.unity")
-                );
+                FileUtil.CopyFileOrDirectory(TalusSettingsDefinitions.ElephantPackageScenePath, TalusSettingsDefinitions.ElephantScenePath);
 
                 SaveAssets();
-                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {TalusSettingsDefinitions.CopiedElephantScenePath}");
+                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {TalusSettingsDefinitions.ElephantScenePath}");
             }
             catch (Exception)
             {

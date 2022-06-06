@@ -9,8 +9,8 @@ namespace TalusSettings.Editor
 
         // elephant package path
         public static readonly string ElephantPackagePath = "Packages/com.talus.taluselephant";
+        public static string ElephantPackageScenePath => Path.Combine(ElephantPackagePath, "elephant_scene.unity");
         public static string ElephantPackageAssetPath => Path.Combine(ElephantPackagePath, "UI/Textures/Resources");
-        public static string CopiedElephantScenePath => Path.Combine(BasePath, "Scenes/Template_Persistent");
 
         // backend keys path
         public static readonly string KeysParentFolder = "Assets";
