@@ -8,7 +8,7 @@ using Facebook.Unity.Settings;
 
 using TalusBackendData.Editor.Models;
 
-namespace TalusSettings.Editor
+namespace TalusSettings.Editor.Backend
 {
     public static class TalusSettingsProvider
     {
