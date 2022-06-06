@@ -1,9 +1,7 @@
 {
-    "name": "TalusSettings.Editor",
+    "name": "TalusSettings.Backend",
     "rootNamespace": "",
     "references": [
-        "TalusSettings.Backend",
-        "TalusFramework",
         "TalusBackendData.Editor",
         "TalusElephant"
     ],
@@ -13,13 +11,11 @@
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
-    "precompiledReferences": [
-        "Facebook.Unity.Settings.dll",
-        "Sirenix.OdinInspector.Editor.dll",
-        "Sirenix.OdinInspector.Attributes.dll"
-    ],
+    "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "ENABLE_BACKEND"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }
