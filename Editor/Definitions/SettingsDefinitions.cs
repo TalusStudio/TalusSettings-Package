@@ -5,7 +5,7 @@ namespace TalusSettings.Editor
     /// <summary>
     ///     Path settings to work with template project.
     /// </summary>
-    public static class TalusSettingsDefinitions
+    public static class SettingsDefinitions
     {
         // reference to assets path
         public static string BasePath => "Assets";

@@ -14,7 +14,7 @@ namespace TalusSettings.Editor.Definitons
     ///     Creates backend assets and paths after domain reloading.
     ///     'TalusSettingsWindow.cs' class uses this class to update project settings.
     /// </summary>
-    public static class TalusAppSettings
+    public static class AppSettings
     {
         public static void UpdateFacebookAsset(AppModel app)
         {
@@ -35,7 +35,7 @@ namespace TalusSettings.Editor.Definitons
 
         public static void UpdateElephantAsset(AppModel app)
         {
-            ElephantSettings elephantSettings = Resources.Load<ElephantSettings>(TalusSettingsDefinitions.ElephantAssetName);
+            ElephantSettings elephantSettings = Resources.Load<ElephantSettings>(SettingsDefinitions.ElephantAssetName);
             if (elephantSettings == null)
             {
                 Debug.LogError("[TalusSettings-Package] Elephant Settings can not found!");
@@ -58,7 +58,7 @@ namespace TalusSettings.Editor.Definitons
 
             EditorApplication.delayCall += () =>
             {
-                CreateKeysFolder(TalusSettingsDefinitions.KeysFolder, TalusSettingsDefinitions.BasePath);
+                CreateKeysFolder(SettingsDefinitions.KeysFolder, SettingsDefinitions.BasePath);
                 CopyElephantScene();
                 CreateFacebookAsset();
                 CreateElephantAsset();
@@ -76,10 +76,10 @@ namespace TalusSettings.Editor.Definitons
         {
             try
             {
-                FileUtil.CopyFileOrDirectory(TalusSettingsDefinitions.ElephantPackageScenePath, TalusSettingsDefinitions.ElephantScenePath);
+                FileUtil.CopyFileOrDirectory(SettingsDefinitions.ElephantPackageScenePath, SettingsDefinitions.ElephantScenePath);
 
                 SaveAssets();
-                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {TalusSettingsDefinitions.ElephantScenePath}");
+                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {SettingsDefinitions.ElephantScenePath}");
             }
             catch (Exception)
             {
@@ -91,7 +91,7 @@ namespace TalusSettings.Editor.Definitons
         {
             if (FacebookSettings.NullableInstance != null) { return; }
 
-            string fullPath = TalusSettingsDefinitions.GetKeyPath($"{ TalusSettingsDefinitions.FacebookAssetName}.asset");
+            string fullPath = SettingsDefinitions.GetKeyPath($"{ SettingsDefinitions.FacebookAssetName}.asset");
             AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<FacebookSettings>(), fullPath);
             SaveAssets();
 
@@ -100,10 +100,10 @@ namespace TalusSettings.Editor.Definitons
 
         private static void CreateElephantAsset()
         {
-            ElephantSettings settings = Resources.Load<ElephantSettings>(TalusSettingsDefinitions.ElephantAssetName);
+            ElephantSettings settings = Resources.Load<ElephantSettings>(SettingsDefinitions.ElephantAssetName);
             if (settings != null) { return; }
 
-            string fullPath = TalusSettingsDefinitions.GetKeyPath($"{TalusSettingsDefinitions.ElephantAssetName}.asset");
+            string fullPath = SettingsDefinitions.GetKeyPath($"{SettingsDefinitions.ElephantAssetName}.asset");
             AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<ElephantSettings>(), AssetDatabase.GenerateUniqueAssetPath(fullPath));
             SaveAssets();
 
