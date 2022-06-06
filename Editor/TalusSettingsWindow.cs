@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEditor;
 using UnityEngine;
@@ -22,24 +23,37 @@ namespace TalusSettings.Editor
 {
     public class TalusSettingsWindow : OdinEditorWindow
     {
-        [Title("Level Settings")]
-        [LabelWidth(100)]
-        [EnableIf("@IsBackendActive() == true")]
-        [ValidateInput("HasSceneValidReference", "elephant_scene is required!")]
+        [OnInspectorInit]
+        private void UpdateData()
+        {
+
+        }
+
+        [OnInspectorDispose]
+        private void ClearData()
+        {
+
+        }
+
+        [Title("Scene Settings")]
+        [LabelWidth(120)]
+        [EnableIf("@GetBackendStatus() == true")]
+        [ValidateInput(nameof(HasSceneValidReference), nameof(ElephantScene) + " is required!")]
         public SceneReference ElephantScene;
 
-        [LabelWidth(100)]
-        [ValidateInput("HasSceneValidReference", "ForwarderScene is required!")]
+        [LabelWidth(120)]
+        [ValidateInput(nameof(HasSceneValidReference), nameof(ForwarderScene) + " is required!")]
         public SceneReference ForwarderScene;
 
-        [LabelWidth(100)]
-        [Required]
+        [LabelWidth(120)]
+        [ValidateInput(nameof(HasCollectionValid), nameof(LevelCollection) + " is not valid!", ContinuousValidationCheck = true)]
         public SceneCollection LevelCollection;
 
-        [Title("App Settings", "Get App_ID from http://34.252.141.173/dashboard")]
-        [LabelWidth(100)]
+        [Title("App Settings")]
+        [InfoBox("Get App_ID from Web Dashboard")]
+        [LabelWidth(120)]
         [ShowInInspector, Required]
-        [InlineButton("OpenDashboard")]
+        [InlineButton(nameof(OpenDashboardUrl), Label = "Web Dashboard")]
         public string AppId
         {
             get { return EditorPrefs.GetString(BackendDefinitions.BackendAppIdPref); }
@@ -47,17 +61,12 @@ namespace TalusSettings.Editor
         }
 
         [DisableInPlayMode]
-        [PropertySpace(8)]
+        [PropertySpace(10)]
         [Button(ButtonSizes.Large), GUIColor(0f, 1f, 0f)]
         public void UpdateProjectSettings()
         {
             BackendApi api = new BackendApi(BackendSettings.ApiUrl, BackendSettings.ApiToken);
             api.GetAppInfo(AppId, UpdateBackendData);
-        }
-
-        private static void OpenDashboard()
-        {
-            Application.OpenURL("http://34.252.141.173/dashboard");
         }
 
         [MenuItem("TalusKit/Backend/Project Settings", false, 10001)]
@@ -76,6 +85,11 @@ namespace TalusSettings.Editor
                 var window = GetWindow<TalusSettingsWindow>();
                 window.Show();
             }
+        }
+
+        private static void OpenDashboardUrl()
+        {
+            Application.OpenURL("http://34.252.141.173/dashboard");
         }
 
         private void UpdateBackendData(AppModel app)
@@ -212,18 +226,16 @@ namespace TalusSettings.Editor
             AssetDatabase.Refresh();
         }
 
-        private static bool IsBackendActive()
-        {
-#if ENABLE_BACKEND
-            return true;
-#else
-            return false;
-#endif
-        }
+        private static bool GetBackendStatus() =>
+            PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS)
+            .Split(';')
+            .ToList()
+            .Contains("ENABLE_BACKEND");
 
-        private bool HasSceneValidReference(SceneReference scene)
-        {
-            return scene != null && !scene.IsEmpty;
-        }
+#region VALIDATIONS
+        private bool HasSceneValidReference(SceneReference scene) => scene != null && !scene.IsEmpty;
+        private bool HasCollectionValid(SceneCollection collection) => collection != null && collection.Count > 0 && !collection[0].IsEmpty;
+#endregion
+
     }
 }
