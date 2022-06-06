@@ -17,23 +17,40 @@ namespace TalusSettings.Editor
 {
     public class TalusSettingsWindow : OdinEditorWindow
     {
-        [Title("Scene Settings")]
-        [LabelWidth(120)]
-        [EnableIf(nameof(IsBackendActive))]
+#if ENABLE_BACKEND
+        private const string _ElephantScenePath = "Assets/Scenes/Template_Persistent/elephant_scene.unity";
+#endif
+
+        private const string _ForwarderScenePath = "Assets/Scenes/Template_Persistent/ForwarderScene.unity";
+
+#if ENABLE_BACKEND
+        [BoxGroup("Base Settings", Order = 0, CenterLabel = true)]
+        [LabelWidth(100)]
         [ValidateInput(nameof(IsSceneValid), nameof(ElephantScene) + " is required!")]
-        public SceneReference ElephantScene;
+        [ShowInInspector]
+        public SceneReference ElephantScene
+        {
+            get { return new SceneReference(_ElephantScenePath); }
+        }
+#endif
 
-        [LabelWidth(120)]
+        [BoxGroup("Base Settings")]
+        [LabelWidth(100)]
         [ValidateInput(nameof(IsSceneValid), nameof(ForwarderScene) + " is required!")]
-        public SceneReference ForwarderScene;
+        [ShowInInspector]
+        public SceneReference ForwarderScene
+        {
+            get { return new SceneReference(_ForwarderScenePath); }
+        }
 
-        [LabelWidth(120)]
+        [BoxGroup("Game Settings", Order = 1, CenterLabel = true)]
+        [LabelWidth(100)]
         [ValidateInput(nameof(IsCollectionValid), nameof(LevelCollection) + " is not valid!", ContinuousValidationCheck = true)]
         public SceneCollection LevelCollection;
 
-        [Title("App Settings")]
+        [BoxGroup("App Settings", Order = 2, CenterLabel = true)]
         [InfoBox("Get App_ID from Web Dashboard")]
-        [LabelWidth(120)]
+        [LabelWidth(100)]
         [ShowInInspector, Required]
         [InlineButton(nameof(OpenDashboardUrl), Label = "Web Dashboard")]
         public string AppId
@@ -43,12 +60,13 @@ namespace TalusSettings.Editor
         }
 
         [DisableInPlayMode]
-        [PropertySpace(10)]
-        [Button(ButtonSizes.Gigantic), GUIColor(0f, 1f, 0f)]
+        [PropertyOrder(999)]
+        [GUIColor(0f, 1f, 0f)]
+        [Button(ButtonSizes.Gigantic)]
         public void UpdateProjectSettings()
         {
 #if ENABLE_BACKEND
-            if (ElephantScene == null || ElephantScene.IsEmpty)
+            if (!IsSceneValid(ElephantScene))
             {
                 InfoBox.Create(
                     "TalusSettings - Package | Error!",
@@ -60,7 +78,7 @@ namespace TalusSettings.Editor
             }
 #endif
 
-            if (ForwarderScene == null || ForwarderScene.IsEmpty)
+            if (!IsSceneValid(ForwarderScene))
             {
                 InfoBox.Create(
                     "TalusSettings - Package | Error!",
@@ -112,7 +130,7 @@ namespace TalusSettings.Editor
             else
             {
                 var window = GetWindow<TalusSettingsWindow>();
-                window.minSize = new Vector2(500, 400);
+                window.minSize = new Vector2(400, 320);
                 window.Show();
             }
         }
@@ -203,6 +221,5 @@ namespace TalusSettings.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
-
     }
 }
