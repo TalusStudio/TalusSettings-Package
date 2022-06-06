@@ -22,19 +22,26 @@ namespace TalusSettings.Editor
 {
     public class TalusSettingsWindow : OdinEditorWindow
     {
-        [Header("Build Settings")]
+        [BoxGroup("Build Settings", CenterLabel = true)]
         [LabelWidth(100)]
         [EnableIf("@IsBackendActive() == true")]
-        [ValidateInput("HasValidReference", "elephant_scene is required!")]
+        [ValidateInput("HasSceneValidReference", "elephant_scene is required!")]
         public SceneReference ElephantScene;
 
+        [BoxGroup("Build Settings", CenterLabel = true)]
         [LabelWidth(100)]
-        [ValidateInput("HasValidReference", "ForwarderScene is required!")]
+        [ValidateInput("HasSceneValidReference", "ForwarderScene is required!")]
         public SceneReference ForwarderScene;
 
+        [BoxGroup("Build Settings", CenterLabel = true)]
         [LabelWidth(100)]
         [Required]
         public SceneCollection LevelCollection;
+
+        [BoxGroup("App Settings", CenterLabel = true)]
+        [LabelWidth(100)]
+        [Required]
+        public string AppId;
 
         [DisableInPlayMode]
         [PropertySpace(8)]
@@ -42,7 +49,7 @@ namespace TalusSettings.Editor
         public void UpdateProjectSettings()
         {
             BackendApi api = new BackendApi(BackendSettings.ApiUrl, BackendSettings.ApiToken);
-            api.GetAppInfo(BackendSettings.AppId, UpdateBackendData);
+            api.GetAppInfo(AppId, UpdateBackendData);
         }
 
         [MenuItem("TalusKit/Backend/Project Settings", false, 10001)]
@@ -55,10 +62,6 @@ namespace TalusSettings.Editor
             else if (string.IsNullOrEmpty(BackendSettings.ApiToken))
             {
                 Debug.LogError("ApiToken can not be empty! (Edit/Project Settings/Talus Studio/Backend Settings)");
-            }
-            else if (string.IsNullOrEmpty(BackendSettings.AppId))
-            {
-                Debug.LogError("AppId can not be empty! (Edit/Project Settings/Talus Studio/Backend Settings)");
             }
             else
             {
@@ -210,9 +213,9 @@ namespace TalusSettings.Editor
 #endif
         }
 
-        private bool HasValidReference(SceneReference scene)
+        private bool HasSceneValidReference(SceneReference scene)
         {
-            return !scene.IsEmpty;
+            return scene != null && !scene.IsEmpty;
         }
     }
 }
