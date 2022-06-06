@@ -2,6 +2,9 @@ using System.IO;
 
 namespace TalusSettings.Editor
 {
+    /// <summary>
+    ///     Path settings to work with template project.
+    /// </summary>
     public static class TalusSettingsDefinitions
     {
         // reference to assets path

@@ -10,6 +10,10 @@ using TalusBackendData.Editor.Models;
 
 namespace TalusSettings.Editor.Definitons
 {
+    /// <summary>
+    ///     Creates backend assets and paths after domain reloading.
+    ///     'TalusSettingsWindow.cs' class uses this class to update project settings.
+    /// </summary>
     public static class TalusAppSettings
     {
         public static void UpdateFacebookAsset(AppModel app)
@@ -26,10 +30,7 @@ namespace TalusSettings.Editor.Definitons
             EditorUtility.SetDirty(FacebookSettings.Instance);
             SaveAssets();
 
-            if (string.IsNullOrEmpty(app.fb_app_id))
-            {
-                Debug.LogWarning("[TalusSettings-Package] Facebook App_ID is empty!");
-            }
+            if (string.IsNullOrEmpty(app.fb_app_id)) { Debug.LogWarning("[TalusSettings-Package] Facebook App_ID is empty!"); }
         }
 
         public static void UpdateElephantAsset(AppModel app)
@@ -46,15 +47,8 @@ namespace TalusSettings.Editor.Definitons
             EditorUtility.SetDirty(elephantSettings);
             SaveAssets();
 
-            if (string.IsNullOrEmpty(app.elephant_id))
-            {
-                Debug.LogWarning("[TalusSettings-Package] Elephant Game_ID is empty!");
-            }
-
-            if (string.IsNullOrEmpty(app.elephant_secret))
-            {
-                Debug.LogWarning("[TalusSettings-Package] Elephant Game_Secret is empty!");
-            }
+            if (string.IsNullOrEmpty(app.elephant_id)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_ID is empty!"); }
+            if (string.IsNullOrEmpty(app.elephant_secret)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_Secret is empty!"); }
         }
 
         [UnityEditor.Callbacks.DidReloadScripts]
@@ -64,8 +58,8 @@ namespace TalusSettings.Editor.Definitons
 
             EditorApplication.delayCall += () =>
             {
-                CopyElephantScene();
                 CreateFolderIfNotExists(TalusSettingsDefinitions.KeysFolder, TalusSettingsDefinitions.BasePath);
+                CopyElephantScene();
                 CreateFacebookAsset();
                 CreateElephantAsset();
             };

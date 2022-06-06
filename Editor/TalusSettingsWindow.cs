@@ -9,6 +9,7 @@ using Sirenix.OdinInspector.Editor;
 using TalusBackendData.Editor;
 using TalusBackendData.Editor.User;
 using TalusBackendData.Editor.Models;
+using TalusBackendData.Editor.Utility;
 
 using TalusFramework.Utility;
 using TalusFramework.Collections;
@@ -19,7 +20,13 @@ using TalusAppSettings = TalusSettings.Editor.Definitons.TalusAppSettings;
 
 namespace TalusSettings.Editor
 {
-    public class TalusSettingsWindow : OdinEditorWindow
+    /// <summary>
+    ///     Window Path on Unity3D: 'TalusKit/Backend/App Settings'.
+    ///     To update project settings with backend data.
+    ///     Updates product name and ios bundle id.
+    ///     Create/Update FB and Elephant SDK keys.
+    /// </summary>
+    internal class TalusSettingsWindow : OdinEditorWindow
     {
 #if ENABLE_BACKEND
         private SceneReference _ElephantScene;
@@ -51,7 +58,7 @@ namespace TalusSettings.Editor
 
         [BoxGroup("Game Settings", Order = 1, CenterLabel = true)]
         [LabelWidth(100)]
-        [ValidateInput(nameof(IsCollectionValid), nameof(LevelCollection) + " is not valid!", ContinuousValidationCheck = true)]
+        [ValidateInput(nameof(IsSceneCollectionValid), nameof(LevelCollection) + " is not valid!", ContinuousValidationCheck = true)]
         public SceneCollection LevelCollection;
 
         [BoxGroup("App Settings", Order = 2, CenterLabel = true)]
@@ -95,7 +102,7 @@ namespace TalusSettings.Editor
                 return;
             }
 
-            if (!IsCollectionValid(LevelCollection))
+            if (!IsSceneCollectionValid(LevelCollection))
             {
                 InfoBox.Create(
                     "TalusSettings - Package | Error !",
@@ -213,12 +220,9 @@ namespace TalusSettings.Editor
             return scene != null && !scene.IsEmpty;
         }
 
-        private bool IsCollectionValid(SceneCollection collection)
+        private bool IsSceneCollectionValid(SceneCollection collection)
         {
-            if (collection == null)
-            {
-                return false;
-            }
+            if (collection == null) { return false; }
 
             int badSceneReferenceCount = 0;
             collection.ForEach(sceneReference => {
