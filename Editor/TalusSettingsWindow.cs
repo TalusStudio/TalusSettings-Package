@@ -52,7 +52,7 @@ namespace TalusSettings.Editor
             api.GetAppInfo(AppId, UpdateBackendData);
         }
 
-        [MenuItem("TalusKit/Backend/Project Settings", false, 10001)]
+        [MenuItem("TalusKit/Backend/App Settings", false, 10001)]
         private static void OpenWindow()
         {
             if (string.IsNullOrEmpty(BackendSettings.ApiUrl))
