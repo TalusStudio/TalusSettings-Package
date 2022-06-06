@@ -74,11 +74,19 @@ namespace TalusSettings.Editor
         {
             if (string.IsNullOrEmpty(BackendSettings.ApiUrl))
             {
-                Debug.LogError("ApiUrl can not be empty! (Edit/Project Settings/Talus Studio/Backend Settings)");
+                EditorUtility.DisplayDialog(
+                    "TalusSettings-Package",
+                    "'Api URL' can not be empty!\n(Edit/Project Settings/Talus Studio/Backend Settings)",
+                    "OK, I understand"
+                );
             }
             else if (string.IsNullOrEmpty(BackendSettings.ApiToken))
             {
-                Debug.LogError("ApiToken can not be empty! (Edit/Project Settings/Talus Studio/Backend Settings)");
+                EditorUtility.DisplayDialog(
+                    "TalusSettings-Package",
+                    "'Api Token' can not be empty!\n(Edit/Project Settings/Talus Studio/Backend Settings)",
+                    "OK, I understand"
+                );
             }
             else
             {
