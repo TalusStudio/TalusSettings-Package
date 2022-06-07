@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 using Sirenix.OdinInspector.Editor;
 
@@ -16,7 +17,8 @@ namespace TalusSettings.Editor.ScriptableObjectEditor
         private static void OpenWindow()
         {
             var window = GetWindow<ScriptableObjectEditorWindow>();
-            window.minSize = new UnityEngine.Vector2(800, 600);
+            window.titleContent = new GUIContent("SO Editor");
+            window.minSize = new Vector2(800, 600);
             window.Show();
         }
 
