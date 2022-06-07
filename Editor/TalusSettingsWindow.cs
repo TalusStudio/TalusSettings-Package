@@ -205,16 +205,6 @@ namespace TalusSettings.Editor
             SaveAssets();
         }
 
-
-        private static bool IsBackendActive()
-        {
-#if ENABLE_BACKEND
-            return true;
-#else
-            return false;
-#endif
-        }
-
         private bool IsSceneValid(SceneReference scene)
         {
             return scene != null && !scene.IsEmpty;
@@ -225,7 +215,8 @@ namespace TalusSettings.Editor
             if (collection == null) { return false; }
 
             int badSceneReferenceCount = 0;
-            collection.ForEach(sceneReference => {
+            collection.ForEach(sceneReference =>
+            {
                 if (sceneReference == null || sceneReference.IsEmpty)
                 {
                     ++badSceneReferenceCount;
