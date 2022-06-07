@@ -8,7 +8,9 @@ using Facebook.Unity.Settings;
 
 using TalusBackendData.Editor.Models;
 
-namespace TalusSettings.Editor.Definitons
+using TalusSettings.Editor.Definitons;
+
+namespace TalusSettings.Editor.Backend
 {
     /// <summary>
     ///     Creates backend assets and paths after domain reloading.
@@ -58,7 +60,7 @@ namespace TalusSettings.Editor.Definitons
 
             EditorApplication.delayCall += () =>
             {
-                CreateKeysFolder(SettingsDefinitions.KeysFolder, SettingsDefinitions.BasePath);
+                CreateKeysFolder(SettingsDefinitions.KeysPathName, SettingsDefinitions.BasePath);
                 CopyElephantScene();
                 CreateFacebookAsset();
                 CreateElephantAsset();
@@ -91,7 +93,7 @@ namespace TalusSettings.Editor.Definitons
         {
             if (FacebookSettings.NullableInstance != null) { return; }
 
-            string fullPath = SettingsDefinitions.GetKeyPath($"{ SettingsDefinitions.FacebookAssetName}.asset");
+            string fullPath = SettingsDefinitions.GetKeyPath($"{SettingsDefinitions.FacebookAssetName}.asset");
             AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<FacebookSettings>(), fullPath);
             SaveAssets();
 
