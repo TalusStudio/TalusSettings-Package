@@ -7,7 +7,6 @@ using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 
 using TalusBackendData.Editor;
-using TalusBackendData.Editor.User;
 using TalusBackendData.Editor.Models;
 using TalusBackendData.Editor.Utility;
 
@@ -99,7 +98,7 @@ namespace TalusSettings.Editor
                 return;
             }
 
-            BackendApi api = new BackendApi(BackendSettings.ApiUrl, BackendSettings.ApiToken);
+            BackendApi api = new BackendApi(BackendDefinitions.ApiUrl, BackendDefinitions.ApiToken);
             api.GetAppInfo(AppId, UpdateBackendData);
         }
 
@@ -115,24 +114,24 @@ namespace TalusSettings.Editor
         [MenuItem("TalusKit/Backend/App Settings", false, 10001)]
         private static void OpenWindow()
         {
-            if (string.IsNullOrEmpty(BackendSettings.ApiUrl))
+            if (string.IsNullOrEmpty(BackendDefinitions.ApiUrl))
             {
                 InfoBox.Create(
                     "Error :(",
                     "'Api URL' can not be empty!\n\n(Edit/Project Settings/Talus Studio/Backend Settings)",
                     "Open Settings",
                     "Close",
-                    () => SettingsService.OpenProjectSettings(BackendSettings.Path)
+                    () => SettingsService.OpenProjectSettings(BackendDefinitions.ProviderPath)
                 );
             }
-            else if (string.IsNullOrEmpty(BackendSettings.ApiToken))
+            else if (string.IsNullOrEmpty(BackendDefinitions.ApiToken))
             {
                 InfoBox.Create(
                     "Error :(",
                     "'Api Token' can not be empty!\n\n(Edit/Project Settings/Talus Studio/Backend Settings)",
                     "Open Settings",
                     "Close",
-                    () => SettingsService.OpenProjectSettings(BackendSettings.Path)
+                    () => SettingsService.OpenProjectSettings(BackendDefinitions.ProviderPath)
                 );
             }
             else
