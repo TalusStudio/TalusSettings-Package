@@ -81,20 +81,20 @@ namespace TalusSettings.Editor
 #if ENABLE_BACKEND
             if (!IsSceneValid(ElephantScene))
             {
-                InfoBox.Create("Error :(", $"{nameof(ElephantScene)} cannot be null!", "OK, I understand");
+                InfoBox.Show("Error :(", $"{nameof(ElephantScene)} cannot be null!", "OK, I understand");
                 return;
             }
 #endif
 
             if (!IsSceneValid(ForwarderScene))
             {
-                InfoBox.Create("Error :(", $"{nameof(ForwarderScene)} cannot be null!", "OK, I understand");
+                InfoBox.Show("Error :(", $"{nameof(ForwarderScene)} cannot be null!", "OK, I understand");
                 return;
             }
 
             if (!IsSceneCollectionValid(LevelCollection))
             {
-                InfoBox.Create("Error :(", $"There is/are invalid scene reference(s) in {nameof(LevelCollection)}.", "OK, I understand");
+                InfoBox.Show("Error :(", $"There is/are invalid scene reference(s) in {nameof(LevelCollection)}.", "OK, I understand");
                 return;
             }
 
@@ -146,7 +146,7 @@ namespace TalusSettings.Editor
             AppSettings.UpdateElephantAsset(app);
 #endif
 
-            InfoBox.Create("Success !", $"App settings updated!\n\n{app}", "OK");
+            InfoBox.Show("Success !", $"App settings updated!\n\n{app}", "OK");
         }
 
         private void UpdateProductSettings(AppModel app)
