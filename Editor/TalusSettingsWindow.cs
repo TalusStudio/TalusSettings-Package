@@ -116,30 +116,19 @@ namespace TalusSettings.Editor
         {
             if (string.IsNullOrEmpty(BackendDefinitions.ApiUrl))
             {
-                InfoBox.Create(
-                    "Error :(",
-                    "'Api URL' can not be empty!\n\n(Edit/Project Settings/Talus Studio/Backend Settings)",
-                    "Open Settings",
-                    "Close",
-                    () => SettingsService.OpenProjectSettings(BackendDefinitions.ProviderPath)
-                );
+                InfoBox.ShowBackendParameterError(nameof(BackendDefinitions.ApiUrl));
+                return;
             }
-            else if (string.IsNullOrEmpty(BackendDefinitions.ApiToken))
+
+            if (string.IsNullOrEmpty(BackendDefinitions.ApiToken))
             {
-                InfoBox.Create(
-                    "Error :(",
-                    "'Api Token' can not be empty!\n\n(Edit/Project Settings/Talus Studio/Backend Settings)",
-                    "Open Settings",
-                    "Close",
-                    () => SettingsService.OpenProjectSettings(BackendDefinitions.ProviderPath)
-                );
+                InfoBox.ShowBackendParameterError(nameof(BackendDefinitions.ApiToken));
+                return;
             }
-            else
-            {
-                var window = GetWindow<TalusSettingsWindow>();
-                window.minSize = new Vector2(400, 400);
-                window.Show();
-            }
+
+            var window = GetWindow<TalusSettingsWindow>();
+            window.minSize = new Vector2(400, 400);
+            window.Show();
         }
 
         private static void OpenDashboardUrl()
