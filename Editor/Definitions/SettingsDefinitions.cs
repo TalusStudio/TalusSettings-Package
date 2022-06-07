@@ -1,5 +1,7 @@
 using System.IO;
 
+using TalusBackendData.Editor;
+
 namespace TalusSettings.Editor.Definitons
 {
     /// <summary>
@@ -21,12 +23,12 @@ namespace TalusSettings.Editor.Definitons
         public static readonly string FacebookAssetName = "FacebookSettings";
 
         // elephant package paths.
-        public static readonly string ElephantPackagePath = @"Packages/com.talus.taluselephant/";
+        private static readonly string ElephantPackagePath = $"Packages/{BackendDefinitions.Packages["talus-elephant"]}/";
         public static string ElephantPackageScenePath => Path.Combine(ElephantPackagePath, "elephant_scene.unity");
 
         // scene paths.
         public static string PersistentScenesPath => Path.Combine(BasePath, @"Scenes/Template_Persistent/");
         public static string ForwarderScenePath => Path.Combine(PersistentScenesPath, "Scene_Forwarder.unity");
-        public static string ElephantScenePath => Path.Combine(PersistentScenesPath, "elephant_scene.unity");
+        public static string ElephantScenePath => Path.Combine(PersistentScenesPath, "Scene_Elephant.unity");
     }
 }

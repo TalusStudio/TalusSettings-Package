@@ -1,7 +1,9 @@
 {
     "name": "TalusSettings.Definitions",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "TalusBackendData.Editor"
+    ],
     "includePlatforms": [
         "Editor"
     ],
