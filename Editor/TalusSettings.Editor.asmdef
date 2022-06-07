@@ -2,18 +2,18 @@
     "name": "TalusSettings.Editor",
     "rootNamespace": "",
     "references": [
-        "TalusSettings.Definitions",
-        "TalusSettings.Backend",
+        "TalusSettings.Editor.Definitions",
+        "TalusSettings.Editor.AppSettings",
+        "TalusBackendData.Editor",
         "TalusFramework",
-        "TalusElephant",
-        "TalusBackendData.Editor"
+        "TalusElephant"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
+    "overrideReferences": true,
     "precompiledReferences": [
         "Facebook.Unity.Settings.dll",
         "Sirenix.OdinInspector.Editor.dll",

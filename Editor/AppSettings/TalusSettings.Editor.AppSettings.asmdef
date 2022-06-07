@@ -1,8 +1,10 @@
 {
-    "name": "TalusSettings.Definitions",
+    "name": "TalusSettings.Editor.AppSettings",
     "rootNamespace": "",
     "references": [
-        "TalusBackendData.Editor"
+        "TalusSettings.Editor.Definitions",
+        "TalusBackendData.Editor",
+        "TalusElephant"
     ],
     "includePlatforms": [
         "Editor"
@@ -12,7 +14,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "ENABLE_BACKEND"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

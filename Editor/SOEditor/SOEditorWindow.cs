@@ -10,14 +10,14 @@ using TalusFramework.Events;
 
 using TalusSettings.Editor.Definitons;
 
-namespace TalusSettings.Editor.ScriptableObjectEditor
+namespace TalusSettings.Editor.SOEditor
 {
-    internal class ScriptableObjectEditorWindow : OdinMenuEditorWindow
+    internal class SOEditorWindow : OdinMenuEditorWindow
     {
         [MenuItem("TalusKit/SO Editor %m", false, -9000)]
         private static void OpenWindow()
         {
-            var window = GetWindow<ScriptableObjectEditorWindow>();
+            var window = GetWindow<SOEditorWindow>();
             window.titleContent = new GUIContent("SO Editor");
             window.minSize = new Vector2(800, 600);
             window.Show();
@@ -48,13 +48,13 @@ namespace TalusSettings.Editor.ScriptableObjectEditor
             tree.AddAssetAtPath(
                 "# Backend/Facebook Settings",
                 SettingsDefinitions.GetKeyPath($"{SettingsDefinitions.FacebookAssetName}.asset"),
-                typeof(UnityEngine.ScriptableObject)
+                typeof(ScriptableObject)
             ).AddThumbnailIcons();
 
             tree.AddAssetAtPath(
                 "# Backend/Elephant Settings",
                 SettingsDefinitions.GetKeyPath($"{SettingsDefinitions.ElephantAssetName}.asset"),
-                typeof(UnityEngine.ScriptableObject)
+                typeof(ScriptableObject)
             ).AddThumbnailIcons();
 #else
             tree.Add("# Backend (not active)/Facebook Settings", null);
