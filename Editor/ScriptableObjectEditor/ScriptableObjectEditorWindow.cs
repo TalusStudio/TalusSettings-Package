@@ -3,6 +3,7 @@ using UnityEngine;
 
 using Sirenix.OdinInspector.Editor;
 
+using TalusFramework.Base;
 using TalusFramework.Managers.Interfaces;
 using TalusFramework.Collections.Interfaces;
 using TalusFramework.Events;
@@ -36,6 +37,10 @@ namespace TalusSettings.Editor.ScriptableObjectEditor
                 .SortMenuItemsByName();
 
             tree.AddAllAssetsAtPath("# Events", SettingsDefinitions.SOPath, typeof(GameEvent), true, true)
+                .AddThumbnailIcons()
+                .SortMenuItemsByName();
+
+            tree.AddAllAssetsAtPath(" # Variables", SettingsDefinitions.SOPath, typeof(BaseValue), true, true)
                 .AddThumbnailIcons()
                 .SortMenuItemsByName();
 
