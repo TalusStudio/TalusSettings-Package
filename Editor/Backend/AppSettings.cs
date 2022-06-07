@@ -60,18 +60,18 @@ namespace TalusSettings.Editor.Backend
 
             EditorApplication.delayCall += () =>
             {
-                CreateKeysFolder(SettingsDefinitions.KeysPathName, SettingsDefinitions.BasePath);
+                CreateKeysFolder(SettingsDefinitions.KeysPath);
                 CopyElephantScene();
                 CreateFacebookAsset();
                 CreateElephantAsset();
             };
         }
 
-        private static void CreateKeysFolder(string folderName, string parent)
+        private static void CreateKeysFolder(string path)
         {
-            if (AssetDatabase.IsValidFolder(Path.Combine(parent, folderName))) { return; }
+            if (Directory.Exists(path)) { return; }
 
-            AssetDatabase.CreateFolder(parent, folderName);
+            Directory.CreateDirectory(path);
         }
 
         private static void CopyElephantScene()

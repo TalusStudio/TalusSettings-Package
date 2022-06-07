@@ -9,13 +9,11 @@ namespace TalusSettings.Editor.Definitons
     /// </summary>
     public static class SettingsDefinitions
     {
-        public const string BasePath = @"Assets/";
-        public const string SOPathName = "ScriptableObjects";
-        public const string KeysPathName = "Resources";
+        public const string BasePath = "Assets/";
 
         // base paths.
-        public static string SOPath => Path.Combine(BasePath, $"{SOPathName}/");
-        public static string KeysPath => Path.Combine(BasePath, $"{KeysPathName}/");
+        public static string SOPath => Path.Combine(BasePath, "ScriptableObjects/");
+        public static string KeysPath => Path.Combine(BasePath, "Resources/");
         public static string GetKeyPath(string asset) => Path.Combine(KeysPath, asset);
 
         // sdk assets.
@@ -27,7 +25,7 @@ namespace TalusSettings.Editor.Definitons
         public static string ElephantPackageScenePath => Path.Combine(ElephantPackagePath, "elephant_scene.unity");
 
         // scene paths.
-        public static string PersistentScenesPath => Path.Combine(BasePath, @"Scenes/Template_Persistent/");
+        public static string PersistentScenesPath => Path.Combine(BasePath, "Scenes/Template_Persistent/");
         public static string ForwarderScenePath => Path.Combine(PersistentScenesPath, "Scene_Forwarder.unity");
         public static string ElephantScenePath => Path.Combine(PersistentScenesPath, "Scene_Elephant.unity");
     }
