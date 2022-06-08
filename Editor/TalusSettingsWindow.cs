@@ -12,11 +12,8 @@ using TalusBackendData.Editor.Utility;
 
 using TalusFramework.Utility;
 using TalusFramework.Collections;
-using TalusSettings.Editor.Definitons;
 
-#if ENABLE_BACKEND
-using AppSettings = TalusSettings.Editor.Backend.AppSettings;
-#endif
+using TalusSettings.Editor.Definitions;
 
 namespace TalusSettings.Editor
 {
@@ -106,9 +103,9 @@ namespace TalusSettings.Editor
         private void InitWindow()
         {
 #if ENABLE_BACKEND
-            _ElephantScene = new SceneReference(SettingsDefinitions.ElephantScenePath);
+            _ElephantScene = new SceneReference(ProjectSettingsHolder.instance.ElephantScenePath);
 #endif
-            _ForwarderScene = new SceneReference(SettingsDefinitions.ForwarderScenePath);
+            _ForwarderScene = new SceneReference(ProjectSettingsHolder.instance.ForwarderScenePath);
         }
 
         [MenuItem("TalusKit/Backend/App Settings", false, 10001)]
@@ -142,8 +139,17 @@ namespace TalusSettings.Editor
             UpdateProductSettings(app);
 
 #if ENABLE_BACKEND
-            AppSettings.UpdateFacebookAsset(app);
-            AppSettings.UpdateElephantAsset(app);
+            if (!AppSettings.AppSettings.UpdateFacebookAsset(app))
+            {
+                InfoBox.Show("Error !", $"Facebook settings couldn't updated!", "OK");
+                return;
+            }
+
+            if (!AppSettings.AppSettings.UpdateElephantAsset(app))
+            {
+                InfoBox.Show("Error !", $"Elephant settings couldn't updated!", "OK");
+                return;
+            }
 #endif
 
             InfoBox.Show("Success !", $"App settings updated!\n\n{app}", "OK");

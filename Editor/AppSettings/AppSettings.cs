@@ -6,11 +6,12 @@ using UnityEngine;
 
 using Facebook.Unity.Settings;
 
+using TalusSettings.Editor.Definitions;
+
+using TalusBackendData.Editor.Utility;
 using TalusBackendData.Editor.Models;
 
-using TalusSettings.Editor.Definitons;
-
-namespace TalusSettings.Editor.Backend
+namespace TalusSettings.Editor.AppSettings
 {
     /// <summary>
     ///     Creates backend assets and paths after domain reloading.
@@ -18,12 +19,12 @@ namespace TalusSettings.Editor.Backend
     /// </summary>
     public static class AppSettings
     {
-        public static void UpdateFacebookAsset(AppModel app)
+        public static bool UpdateFacebookAsset(AppModel app)
         {
             if (FacebookSettings.NullableInstance == null)
             {
                 Debug.LogError("[TalusSettings-Package] Facebook settings can not found!");
-                return;
+                return false;
             }
 
             FacebookSettings.SelectedAppIndex = 0;
@@ -33,15 +34,17 @@ namespace TalusSettings.Editor.Backend
             SaveAssets();
 
             if (string.IsNullOrEmpty(app.fb_app_id)) { Debug.LogWarning("[TalusSettings-Package] Fb_App_Id is empty!"); }
+
+            return true;
         }
 
-        public static void UpdateElephantAsset(AppModel app)
+        public static bool UpdateElephantAsset(AppModel app)
         {
-            ElephantSettings elephantSettings = Resources.Load<ElephantSettings>(SettingsDefinitions.ElephantAssetName);
+            var elephantSettings = Resources.Load<ElephantSettings>(ProjectSettingsHolder.instance.ElephantAssetName);
             if (elephantSettings == null)
             {
                 Debug.LogError("[TalusSettings-Package] Elephant Settings can not found!");
-                return;
+                return false;
             }
 
             elephantSettings.GameID = app.elephant_id;
@@ -51,6 +54,8 @@ namespace TalusSettings.Editor.Backend
 
             if (string.IsNullOrEmpty(app.elephant_id)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_ID is empty!"); }
             if (string.IsNullOrEmpty(app.elephant_secret)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_Secret is empty!"); }
+
+            return true;
         }
 
         [UnityEditor.Callbacks.DidReloadScripts]
@@ -60,28 +65,42 @@ namespace TalusSettings.Editor.Backend
 
             EditorApplication.delayCall += () =>
             {
-                CreateKeysFolder(SettingsDefinitions.KeysPath);
+                if (!CreateKeysFolder(ProjectSettingsHolder.instance.KeysPath))
+                {
+                    InfoBox.Show(
+                        "Talus Backend",
+                        $"{ProjectSettingsHolder.instance.KeysPath} couldn't created! Process is cancelling...",
+                        "OK"
+                    );
+                    return;
+                }
+
                 CopyElephantScene();
                 CreateFacebookAsset();
                 CreateElephantAsset();
             };
         }
 
-        private static void CreateKeysFolder(string path)
+        private static bool CreateKeysFolder(string path)
         {
-            if (Directory.Exists(path)) { return; }
+            if (Directory.Exists(path)) { return true; }
 
             Directory.CreateDirectory(path);
+
+            return Directory.Exists(path);
         }
 
         private static void CopyElephantScene()
         {
             try
             {
-                FileUtil.CopyFileOrDirectory(SettingsDefinitions.ElephantPackageScenePath, SettingsDefinitions.ElephantScenePath);
+                FileUtil.CopyFileOrDirectory(
+                    ProjectSettingsHolder.instance.ElephantSceneInPackage,
+                    ProjectSettingsHolder.instance.ElephantScenePath
+                );
 
                 SaveAssets();
-                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {SettingsDefinitions.ElephantScenePath}");
+                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {ProjectSettingsHolder.instance.ElephantScenePath}");
             }
             catch (Exception)
             {
@@ -93,7 +112,7 @@ namespace TalusSettings.Editor.Backend
         {
             if (FacebookSettings.NullableInstance != null) { return; }
 
-            string fullPath = SettingsDefinitions.GetKeyPath($"{SettingsDefinitions.FacebookAssetName}.asset");
+            string fullPath = ProjectSettingsHolder.instance.GetKeyPath($"{ProjectSettingsHolder.instance.FacebookAssetName}.asset");
             AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<FacebookSettings>(), fullPath);
             SaveAssets();
 
@@ -102,10 +121,10 @@ namespace TalusSettings.Editor.Backend
 
         private static void CreateElephantAsset()
         {
-            ElephantSettings settings = Resources.Load<ElephantSettings>(SettingsDefinitions.ElephantAssetName);
+            ElephantSettings settings = Resources.Load<ElephantSettings>(ProjectSettingsHolder.instance.ElephantAssetName);
             if (settings != null) { return; }
 
-            string fullPath = SettingsDefinitions.GetKeyPath($"{SettingsDefinitions.ElephantAssetName}.asset");
+            string fullPath = ProjectSettingsHolder.instance.GetKeyPath($"{ProjectSettingsHolder.instance.ElephantAssetName}.asset");
             AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<ElephantSettings>(), AssetDatabase.GenerateUniqueAssetPath(fullPath));
             SaveAssets();
 
