@@ -34,7 +34,7 @@ namespace TalusSettings.Editor.Definitions
                     string.Join(
                         "\n\n",
                         "Talus Prototype - Project Layout",
-                        "To work with CI/CD automation."),
+                        "To automate populate Unity project settings"),
                     MessageType.Info,
                     true
                 );
@@ -52,6 +52,14 @@ namespace TalusSettings.Editor.Definitions
 
                         EditorGUILayout.LabelField($"{serializedProperty.displayName}:");
                         serializedProperty.stringValue = EditorGUILayout.TextField(serializedProperty.stringValue);
+                    }
+
+                    GUILayout.FlexibleSpace();
+
+                    GUI.backgroundColor = Color.green;
+                    if (GUILayout.Button("Reset to defaults", GUILayout.MinHeight(50)))
+                    {
+
                     }
 
                     if (EditorGUI.EndChangeCheck())
