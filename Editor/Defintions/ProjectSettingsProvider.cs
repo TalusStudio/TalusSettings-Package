@@ -44,6 +44,7 @@ namespace TalusSettings.Editor.Definitions
                 );
                 GUI.backgroundColor = defaultColor;
 
+                GUILayout.Space(8);
                 EditorGUI.BeginChangeCheck();
 
                 GUI.enabled = !_UnlockPanel;
@@ -54,10 +55,10 @@ namespace TalusSettings.Editor.Definitions
                     {
                         if (serializedProperty.name == "m_Script") { continue; }
 
-                        EditorGUILayout.Separator();
-
-                        EditorGUILayout.LabelField($"{serializedProperty.displayName}:");
-                        serializedProperty.stringValue = EditorGUILayout.TextField(serializedProperty.stringValue);
+                        serializedProperty.stringValue = EditorGUILayout.TextField(
+                            GetLabel(serializedProperty.displayName),
+                            serializedProperty.stringValue
+                        );
                     }
 
                     GUILayout.FlexibleSpace();
@@ -71,6 +72,7 @@ namespace TalusSettings.Editor.Definitions
                         _UnlockPanel = !_UnlockPanel;
                     }
 
+                    GUI.enabled = !_UnlockPanel;
                     GUI.backgroundColor = Color.green;
                     if (GUILayout.Button("Reset to defaults", GUILayout.MinHeight(50)))
                     {
@@ -86,6 +88,8 @@ namespace TalusSettings.Editor.Definitions
             }
             EditorGUILayout.EndVertical();
         }
+
+        public static GUIContent GetLabel(string name) => EditorGUIUtility.TrTextContent(name);
 
         [SettingsProvider]
         public static SettingsProvider CreateProjectSettingsProvider()
