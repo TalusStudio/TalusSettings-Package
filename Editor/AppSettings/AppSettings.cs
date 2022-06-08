@@ -95,7 +95,7 @@ namespace TalusSettings.Editor.AppSettings
             try
             {
                 FileUtil.CopyFileOrDirectory(
-                    ProjectSettingsHolder.instance.ElephantSceneInPackage,
+                    ProjectSettingsHolder.instance.ElephantSceneSource,
                     ProjectSettingsHolder.instance.ElephantScenePath
                 );
 

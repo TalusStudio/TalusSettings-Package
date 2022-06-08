@@ -1,7 +1,6 @@
 using TalusBackendData.Editor;
 
 using UnityEditor;
-
 using UnityEngine;
 
 namespace TalusSettings.Editor.Definitions
@@ -13,11 +12,14 @@ namespace TalusSettings.Editor.Definitions
     public class ProjectSettingsHolder : ScriptableSingleton<ProjectSettingsHolder>
     {
         /// <summary>
-        ///     Unity3D - Projecy Layout Panel Path
+        ///     Unity3D - Project Layout Panel Path
         /// </summary>
         private const string _ProviderPath = "Talus Studio/Project Layout";
         public static string SettingsProviderPath => _ProviderPath;
 
+        /// <summary>
+        ///     Root path.
+        /// </summary>
         private const string s_BasePath = "Assets/";
         public static string BasePath
         {
@@ -31,6 +33,9 @@ namespace TalusSettings.Editor.Definitions
             get { return _SOPath; }
         }
 
+        /// <summary>
+        ///     Keys root path. (facebook settings and elephant settings)
+        /// </summary>
         [SerializeField]
         private string _KeysPath = $"{BasePath}Resources/";
         public string KeysPath
@@ -38,18 +43,14 @@ namespace TalusSettings.Editor.Definitions
             get { return _KeysPath; }
         }
 
+        /// <summary>
+        ///     To copy elephant scene from packages.
+        /// </summary>
         [SerializeField]
-        private string _ForwarderScenePath = $"{BasePath}Scenes/Template_Persistent/Scene_Forwarder.unity";
-        public string ForwarderScenePath
+        private string _ElephantSceneSource = $"Packages/{BackendSettingsHolder.instance.Packages["talus-elephant"]}/elephant_scene.unity";
+        public string ElephantSceneSource
         {
-            get { return _ForwarderScenePath; }
-        }
-
-        [SerializeField]
-        private string _ElephantSceneInPackage = $"Packages/{BackendSettingsHolder.instance.Packages["talus-elephant"]}/elephant_scene.unity";
-        public string ElephantSceneInPackage
-        {
-            get { return _ElephantSceneInPackage; }
+            get { return _ElephantSceneSource; }
         }
 
         [SerializeField]
@@ -57,6 +58,13 @@ namespace TalusSettings.Editor.Definitions
         public string ElephantScenePath
         {
             get { return _ElephantScenePath; }
+        }
+
+        [SerializeField]
+        private string _ForwarderScenePath = $"{BasePath}Scenes/Template_Persistent/Scene_Forwarder.unity";
+        public string ForwarderScenePath
+        {
+            get { return _ForwarderScenePath; }
         }
 
         [SerializeField]

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 
-using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 
@@ -9,7 +8,6 @@ namespace TalusSettings.Editor.Definitions
     class ProjectSettingsProvider : SettingsProvider
     {
         private SerializedObject _SerializedObject;
-
 
         public ProjectSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null)
             : base(path, scopes, keywords)
