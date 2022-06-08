@@ -37,7 +37,7 @@ namespace TalusSettings.Editor.Definitions
                 EditorGUILayout.HelpBox(
                     string.Join(
                         "\n\n",
-                        "Talus Prototype - Project Layout (Do not leave any input fields blank!)",
+                        $"{ProjectSettingsHolder.ProviderPath} (Do not leave any input fields blank!)",
                         "To automate populate Unity project settings"),
                     MessageType.Info,
                     true
