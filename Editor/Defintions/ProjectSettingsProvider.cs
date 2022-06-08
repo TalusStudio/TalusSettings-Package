@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 
 using UnityEditor;
+
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace TalusSettings.Editor.Definitions
@@ -43,12 +45,16 @@ namespace TalusSettings.Editor.Definitions
                     {
                         if (serializedProperty.name == "m_Script") { continue; }
 
-                        EditorGUILayout.PropertyField(serializedProperty);
+                        EditorGUILayout.Separator();
+
+                        EditorGUILayout.LabelField($"{serializedProperty.displayName}:");
+                        serializedProperty.stringValue = EditorGUILayout.TextField(serializedProperty.stringValue);
                     }
 
                     if (EditorGUI.EndChangeCheck())
                     {
                         _SerializedObject.ApplyModifiedProperties();
+                        ProjectSettingsHolder.instance.SaveSettings();
                     }
                 }
             }
