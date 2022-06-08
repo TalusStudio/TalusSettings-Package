@@ -28,6 +28,8 @@ namespace TalusSettings.Editor.Definitions
             {
                 _SerializedObject.Update();
 
+                Color defaultColor = GUI.color;
+                GUI.backgroundColor = Color.yellow;
                 EditorGUILayout.HelpBox(
                     string.Join(
                         "\n\n",
@@ -36,6 +38,7 @@ namespace TalusSettings.Editor.Definitions
                     MessageType.Info,
                     true
                 );
+                GUI.backgroundColor = defaultColor;
 
                 {
                     EditorGUI.BeginChangeCheck();
