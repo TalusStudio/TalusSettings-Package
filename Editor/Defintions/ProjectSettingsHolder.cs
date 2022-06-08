@@ -11,20 +11,13 @@ namespace TalusSettings.Editor.Definitions
     [FilePath("ProjectSettings/TalusProject.asset", FilePathAttribute.Location.ProjectFolder)]
     public class ProjectSettingsHolder : ScriptableSingleton<ProjectSettingsHolder>
     {
-        /// <summary>
-        ///     TalusProject.asset path
-        /// </summary>
+        // TalusProject.asset path
         public string Path => GetFilePath();
 
-        /// <summary>
-        ///     Unity3D - Project Layout Panel Path
-        /// </summary>
+        // Unity3D - Project Layout Panel Path
         private const string _ProviderPath = "Talus Studio/Project Layout";
-        public static string SettingsProviderPath => _ProviderPath;
+        public static string ProviderPath => _ProviderPath;
 
-        /// <summary>
-        ///     Root path.
-        /// </summary>
         private const string s_BasePath = "Assets/";
         public static string BasePath
         {
@@ -43,9 +36,7 @@ namespace TalusSettings.Editor.Definitions
             }
         }
 
-        /// <summary>
-        ///     Keys root path. (facebook settings and elephant settings)
-        /// </summary>
+        // Keys root path. (facebook settings and elephant settings)
         [SerializeField]
         private string _KeysPath = $"{BasePath}Resources/";
         public string KeysPath
@@ -58,9 +49,7 @@ namespace TalusSettings.Editor.Definitions
             }
         }
 
-        /// <summary>
-        ///     To copy elephant scene from packages.
-        /// </summary>
+        // To copy elephant scene from packages.
         [SerializeField]
         private string _ElephantSceneSource = default;
         public string ElephantSceneSource

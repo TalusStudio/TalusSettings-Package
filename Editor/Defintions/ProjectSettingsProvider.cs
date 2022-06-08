@@ -68,7 +68,7 @@ namespace TalusSettings.Editor.Definitions
         public static SettingsProvider CreateProjectSettingsProvider()
         {
             return new ProjectSettingsProvider(
-                ProjectSettingsHolder.SettingsProviderPath,
+                ProjectSettingsHolder.ProviderPath,
                 SettingsScope.Project
             );
 
