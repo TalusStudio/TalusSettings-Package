@@ -47,7 +47,7 @@ namespace TalusSettings.Editor.Definitions
         ///     To copy elephant scene from packages.
         /// </summary>
         [SerializeField]
-        private string _ElephantSceneSource = $"Packages/{BackendSettingsHolder.instance.Packages["talus-elephant"]}/elephant_scene.unity";
+        private string _ElephantSceneSource = default;
         public string ElephantSceneSource
         {
             get { return _ElephantSceneSource; }
@@ -91,6 +91,11 @@ namespace TalusSettings.Editor.Definitions
         public void SaveSettings()
         {
             Save(true);
+        }
+
+        private void OnEnable()
+        {
+            _ElephantSceneSource = $"Packages/{BackendSettingsHolder.instance.Packages["talus-elephant"]}/elephant_scene.unity";
         }
     }
 }
