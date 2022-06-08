@@ -12,6 +12,11 @@ namespace TalusSettings.Editor.Definitions
     public class ProjectSettingsHolder : ScriptableSingleton<ProjectSettingsHolder>
     {
         /// <summary>
+        ///     TalusProject.asset path
+        /// </summary>
+        public string Path => GetFilePath();
+
+        /// <summary>
         ///     Unity3D - Project Layout Panel Path
         /// </summary>
         private const string _ProviderPath = "Talus Studio/Project Layout";
@@ -31,6 +36,11 @@ namespace TalusSettings.Editor.Definitions
         public string SOPath
         {
             get { return _SOPath; }
+            set
+            {
+                _SOPath = value;
+                SaveSettings();
+            }
         }
 
         /// <summary>
@@ -41,6 +51,11 @@ namespace TalusSettings.Editor.Definitions
         public string KeysPath
         {
             get { return _KeysPath; }
+            set
+            {
+                _KeysPath = value;
+                SaveSettings();
+            }
         }
 
         /// <summary>
@@ -51,6 +66,11 @@ namespace TalusSettings.Editor.Definitions
         public string ElephantSceneSource
         {
             get { return _ElephantSceneSource; }
+            set
+            {
+                _ElephantSceneSource = value;
+                SaveSettings();
+            }
         }
 
         [SerializeField]
@@ -58,6 +78,11 @@ namespace TalusSettings.Editor.Definitions
         public string ElephantScenePath
         {
             get { return _ElephantScenePath; }
+            set
+            {
+                _ElephantScenePath = value;
+                SaveSettings();
+            }
         }
 
         [SerializeField]
@@ -65,6 +90,11 @@ namespace TalusSettings.Editor.Definitions
         public string ForwarderScenePath
         {
             get { return _ForwarderScenePath; }
+            set
+            {
+                _ForwarderScenePath = value;
+                SaveSettings();
+            }
         }
 
         [SerializeField]
@@ -72,6 +102,11 @@ namespace TalusSettings.Editor.Definitions
         public string ElephantAssetName
         {
             get { return _ElephantAssetName; }
+            set
+            {
+                _ElephantAssetName = value;
+                SaveSettings();
+            }
         }
 
         [SerializeField]
@@ -79,14 +114,17 @@ namespace TalusSettings.Editor.Definitions
         public string FacebookAssetName
         {
             get { return _FacebookAssetName; }
+            set
+            {
+                _FacebookAssetName = value;
+                SaveSettings();
+            }
         }
 
         public string GetKeyPath(string assetName)
         {
             return System.IO.Path.Combine(KeysPath, assetName);
         }
-
-        public string Path => GetFilePath();
 
         public void SaveSettings()
         {

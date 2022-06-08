@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 
-using UnityEngine.UIElements;
 using UnityEditor;
+using UnityEngine.UIElements;
 
 namespace TalusSettings.Editor.Definitions
 {
-    class ProjectSettingsProvider : SettingsProvider
+    public class ProjectSettingsProvider : SettingsProvider
     {
         private SerializedObject _SerializedObject;
 
@@ -22,29 +22,36 @@ namespace TalusSettings.Editor.Definitions
 
         public override void OnGUI(string searchContext)
         {
-            _SerializedObject.Update();
-
-            EditorGUILayout.HelpBox(
-                string.Join(
-                    "\n\n",
-                    "Talus Backend - Project Layout",
-                    "You can see default project folder layout to work with CI/CD automation."),
-                MessageType.Info,
-                true
-            );
-
             EditorGUILayout.BeginVertical();
-
-            SerializedProperty prop = _SerializedObject.GetIterator();
-            if (prop.NextVisible(true))
             {
-                do
-                {
-                   EditorGUILayout.PropertyField(_SerializedObject.FindProperty(prop.name), true);
-                }
-                while (prop.NextVisible(false));
-            }
+                _SerializedObject.Update();
 
+                EditorGUILayout.HelpBox(
+                    string.Join(
+                        "\n\n",
+                        "Talus Prototype - Project Layout",
+                        "To work with CI/CD automation."),
+                    MessageType.Info,
+                    true
+                );
+
+                {
+                    EditorGUI.BeginChangeCheck();
+
+                    SerializedProperty serializedProperty = _SerializedObject.GetIterator();
+                    while (serializedProperty.NextVisible(true))
+                    {
+                        if (serializedProperty.name == "m_Script") { continue; }
+
+                        EditorGUILayout.PropertyField(serializedProperty);
+                    }
+
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        _SerializedObject.ApplyModifiedProperties();
+                    }
+                }
+            }
             EditorGUILayout.EndVertical();
         }
 
