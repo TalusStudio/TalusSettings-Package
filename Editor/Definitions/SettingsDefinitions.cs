@@ -21,7 +21,7 @@ namespace TalusSettings.Editor.Definitons
         public static readonly string FacebookAssetName = "FacebookSettings";
 
         // elephant package paths.
-        private static readonly string ElephantPackagePath = $"Packages/{BackendDefinitions.Packages["talus-elephant"]}/";
+        private static readonly string ElephantPackagePath = $"Packages/{BackendSettingsHolder.instance.Packages["talus-elephant"]}/";
         public static string ElephantPackageScenePath => Path.Combine(ElephantPackagePath, "elephant_scene.unity");
 
         // scene paths.

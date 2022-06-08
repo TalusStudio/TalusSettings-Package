@@ -68,8 +68,8 @@ namespace TalusSettings.Editor
         [InlineButton(nameof(OpenDashboardUrl), Label = "Web Dashboard")]
         public string AppId
         {
-            get { return EditorPrefs.GetString(BackendDefinitions.BackendAppIdPref); }
-            set { EditorPrefs.SetString(BackendDefinitions.BackendAppIdPref, value); }
+            get { return BackendSettingsHolder.instance.AppId; }
+            set { BackendSettingsHolder.instance.AppId = value; }
         }
 
         [DisableInPlayMode]
@@ -98,7 +98,7 @@ namespace TalusSettings.Editor
                 return;
             }
 
-            BackendApi api = new BackendApi(BackendDefinitions.ApiUrl, BackendDefinitions.ApiToken);
+            BackendApi api = new BackendApi(BackendSettingsHolder.instance.ApiUrl, BackendSettingsHolder.instance.ApiToken);
             api.GetAppInfo(AppId, UpdateBackendData);
         }
 
@@ -114,15 +114,15 @@ namespace TalusSettings.Editor
         [MenuItem("TalusKit/Backend/App Settings", false, 10001)]
         private static void OpenWindow()
         {
-            if (string.IsNullOrEmpty(BackendDefinitions.ApiUrl))
+            if (string.IsNullOrEmpty(BackendSettingsHolder.instance.ApiUrl))
             {
-                InfoBox.ShowBackendParameterError(nameof(BackendDefinitions.ApiUrl));
+                InfoBox.ShowBackendParameterError(nameof(BackendSettingsHolder.instance.ApiUrl));
                 return;
             }
 
-            if (string.IsNullOrEmpty(BackendDefinitions.ApiToken))
+            if (string.IsNullOrEmpty(BackendSettingsHolder.instance.ApiToken))
             {
-                InfoBox.ShowBackendParameterError(nameof(BackendDefinitions.ApiToken));
+                InfoBox.ShowBackendParameterError(nameof(BackendSettingsHolder.instance.ApiToken));
                 return;
             }
 
