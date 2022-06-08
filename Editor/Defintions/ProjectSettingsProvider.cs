@@ -9,6 +9,8 @@ namespace TalusSettings.Editor.Definitions
 {
     internal class ProjectSettingsProvider : SettingsProvider
     {
+        private bool _UnlockPanel = true;
+
         private SerializedObject _SerializedObject;
 
         public ProjectSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null)
@@ -20,6 +22,8 @@ namespace TalusSettings.Editor.Definitions
             ProjectSettingsHolder.instance.SaveSettings();
 
             _SerializedObject = new SerializedObject(ProjectSettingsHolder.instance);
+
+            _UnlockPanel = true;
         }
 
         public override void OnGUI(string searchContext)
@@ -40,6 +44,7 @@ namespace TalusSettings.Editor.Definitions
                 );
                 GUI.backgroundColor = defaultColor;
 
+                GUI.enabled = !_UnlockPanel;
                 {
                     EditorGUI.BeginChangeCheck();
 
@@ -55,6 +60,15 @@ namespace TalusSettings.Editor.Definitions
                     }
 
                     GUILayout.FlexibleSpace();
+
+                    GUI.enabled = true;
+                    GUI.backgroundColor = Color.yellow;
+
+                    string lockButtonName = (_UnlockPanel) ? "Unlock Settings" : "Lock Settings";
+                    if (GUILayout.Button(lockButtonName, GUILayout.MinHeight(50)))
+                    {
+                        _UnlockPanel = !_UnlockPanel;
+                    }
 
                     GUI.backgroundColor = Color.green;
                     if (GUILayout.Button("Reset to defaults", GUILayout.MinHeight(50)))
