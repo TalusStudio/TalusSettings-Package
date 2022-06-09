@@ -6,14 +6,14 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 
+using TalusSettings.Editor.Definitions;
+
 using TalusBackendData.Editor;
 using TalusBackendData.Editor.Models;
 using TalusBackendData.Editor.Utility;
 
 using TalusFramework.Utility;
 using TalusFramework.Collections;
-
-using TalusSettings.Editor.Definitions;
 
 namespace TalusSettings.Editor
 {
@@ -23,56 +23,57 @@ namespace TalusSettings.Editor
     ///     Updates product name and ios bundle id.
     ///     Create/Update FB and Elephant SDK keys.
     /// </summary>
+    ///
+    [DetailedInfoBox(
+        "Click here for details!",
+        "Talus Studio/Prototype - Build Settings\n\n" +
+        "This window makes all the necessary changes to properly upload the project to TestFlight.\n\n" +
+        "NOTE: If you create new Level Collection, don't forget to reference that new collection in Runtime Data Manager scriptable object." +
+        "There is an editor window 'TalusKit/SO Editor' to inspect managers. (shortcut: CTRL + M)"
+    )]
     internal class TalusSettingsWindow : OdinEditorWindow
     {
 #if ENABLE_BACKEND
         private SceneReference _ElephantScene;
 
-        [BoxGroup("Base Settings", Order = 0, CenterLabel = true)]
-        [LabelWidth(100)]
-        [ValidateInput(nameof(IsSceneValid), nameof(ElephantScene) + " is required!")]
+        [LabelWidth(120)]
         [ShowInInspector]
         [HideReferenceObjectPicker]
         public SceneReference ElephantScene
         {
             get { return _ElephantScene; }
-            set { _ElephantScene = value.Clone(); }
+            set { }
         }
 #endif
 
         private SceneReference _ForwarderScene;
 
-        [BoxGroup("Base Settings", Order = 0, CenterLabel = true)]
-        [LabelWidth(100)]
-        [ValidateInput(nameof(IsSceneValid), nameof(ForwarderScene) + " is required!")]
+        [LabelWidth(120)]
         [ShowInInspector]
         [HideReferenceObjectPicker]
         public SceneReference ForwarderScene
         {
             get { return _ForwarderScene; }
-            set { _ForwarderScene = value.Clone(); }
+            set { }
         }
 
-        [BoxGroup("Game Settings", Order = 1, CenterLabel = true)]
-        [LabelWidth(100)]
-        [ValidateInput(nameof(IsSceneCollectionValid), nameof(LevelCollection) + " is not valid!", ContinuousValidationCheck = true)]
+        [LabelWidth(120)]
+        [InlineButton(nameof(CreateSceneCollection), Label = "Create")]
+        [PropertyOrder(998)]
+        [PropertySpace(SpaceBefore = 16)]
+        [Required]
         public SceneCollection LevelCollection;
 
-        [BoxGroup("App Settings", Order = 2, CenterLabel = true)]
-        [InfoBox("Get App_ID from Web Dashboard")]
-        [LabelWidth(100)]
+        [LabelWidth(120)]
         [ShowInInspector, Required]
-        [InlineButton(nameof(OpenDashboardUrl), Label = "Web Dashboard")]
-        public string AppId
+        [InlineButton(nameof(OpenDashboardUrl), Label = "Get ID ")]
+        [PropertyOrder(999)]
+        public string AppID
         {
             get { return BackendSettingsHolder.instance.AppId; }
             set { BackendSettingsHolder.instance.AppId = value; }
         }
 
-        [DisableInPlayMode]
-        [PropertyOrder(999)]
-        [GUIColor(0f, 1f, 0f)]
-        [Button(ButtonSizes.Gigantic)]
         public void UpdateProjectSettings()
         {
 #if ENABLE_BACKEND
@@ -96,7 +97,7 @@ namespace TalusSettings.Editor
             }
 
             BackendApi api = new BackendApi(BackendSettingsHolder.instance.ApiUrl, BackendSettingsHolder.instance.ApiToken);
-            api.GetAppInfo(AppId, UpdateBackendData);
+            api.GetAppInfo(AppID, UpdateBackendData);
         }
 
         [OnInspectorInit]
@@ -108,7 +109,7 @@ namespace TalusSettings.Editor
             _ForwarderScene = new SceneReference(ProjectSettingsHolder.instance.ForwarderScenePath);
         }
 
-        [MenuItem("TalusKit/Backend/App Settings", false, 10001)]
+        [MenuItem("TalusKit/Backend/Build Settings", false, 10001)]
         private static void OpenWindow()
         {
             if (string.IsNullOrEmpty(BackendSettingsHolder.instance.ApiUrl))
@@ -124,13 +125,31 @@ namespace TalusSettings.Editor
             }
 
             var window = GetWindow<TalusSettingsWindow>();
-            window.minSize = new Vector2(400, 400);
+            window.minSize = new Vector2(430, 250);
             window.Show();
+        }
+
+        protected override void Initialize()
+        {
+            var window = GetWindow<TalusSettingsWindow>();
+            window.OnEndGUI += () =>
+            {
+                GUI.backgroundColor = Color.green;
+                if (GUILayout.Button("Update Project Settings", GUILayout.MinHeight(50)))
+                {
+                    UpdateProjectSettings();
+                }
+            };
         }
 
         private static void OpenDashboardUrl()
         {
             Application.OpenURL("http://34.252.141.173/dashboard");
+        }
+
+        private static void CreateSceneCollection()
+        {
+            Debug.LogError("Not implemented!");
         }
 
         private void UpdateBackendData(AppModel app)
