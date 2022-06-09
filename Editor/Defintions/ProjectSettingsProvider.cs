@@ -13,6 +13,12 @@ namespace TalusSettings.Editor.Definitions
     {
         private SerializedObject _SerializedObject;
 
+        [SettingsProvider]
+        public static SettingsProvider CreateProjectSettingsProvider()
+        {
+            return new ProjectSettingsProvider(ProjectSettingsHolder.ProviderPath, SettingsScope.Project);
+        }
+
         public ProjectSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null)
             : base(path, scopes, keywords)
         { }
@@ -77,16 +83,6 @@ namespace TalusSettings.Editor.Definitions
                 }
             }
             EditorGUILayout.EndVertical();
-        }
-
-        [SettingsProvider]
-        public static SettingsProvider CreateProjectSettingsProvider()
-        {
-            return new ProjectSettingsProvider(
-                ProjectSettingsHolder.ProviderPath,
-                SettingsScope.Project
-            );
-
         }
     }
 }
