@@ -65,14 +65,8 @@ namespace TalusSettings.Editor.Definitions
                             serializedProperty.stringValue
                         );
                     }
-
-                    GUI.enabled = !UnlockPanel;
-                    GUI.backgroundColor = Color.green;
-                    if (GUILayout.Button("Reset to defaults", GUILayout.MinHeight(50)))
-                    {
-
-                    }
                 }
+
                 // unlock button
                 base.OnGUI(searchContext);
 
