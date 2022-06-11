@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 
 using UnityEditor;
-
-using UnityEngine;
 using UnityEngine.UIElements;
 
 using TalusBackendData.Editor.Interfaces;
@@ -11,8 +9,11 @@ namespace TalusSettings.Editor.Definitions
 {
     internal class ProjectSettingsProvider : BaseSettingsProvider<ProjectSettingsProvider>
     {
-        private SerializedObject _SerializedObject;
+        public override string Title => $"{ProjectSettingsHolder.ProviderPath} (Do not leave any input fields blank!)";
+        public override string Description => "To automate populate Unity project settings";
+
         public override SerializedObject SerializedObject => _SerializedObject;
+        private SerializedObject _SerializedObject;
 
         [SettingsProvider]
         public static SettingsProvider CreateProjectSettingsProvider()
@@ -37,30 +38,13 @@ namespace TalusSettings.Editor.Definitions
         {
             _SerializedObject.Update();
 
-            EditorGUILayout.BeginVertical();
+            base.OnGUI(searchContext);
+
+            if (EditorGUI.EndChangeCheck())
             {
-                Color defaultColor = GUI.color;
-                GUI.backgroundColor = Color.yellow;
-                EditorGUILayout.HelpBox(
-                    string.Join(
-                        "\n\n",
-                        $"{ProjectSettingsHolder.ProviderPath} (Do not leave any input fields blank!)",
-                        "To automate populate Unity project settings"),
-                    MessageType.Info,
-                    true
-                );
-                GUI.backgroundColor = defaultColor;
-
-                // unlock button
-                base.OnGUI(searchContext);
-
-                if (EditorGUI.EndChangeCheck())
-                {
-                    _SerializedObject.ApplyModifiedProperties();
-                    ProjectSettingsHolder.instance.SaveSettings();
-                }
+                _SerializedObject.ApplyModifiedProperties();
+                ProjectSettingsHolder.instance.SaveSettings();
             }
-            EditorGUILayout.EndVertical();
         }
     }
 }
