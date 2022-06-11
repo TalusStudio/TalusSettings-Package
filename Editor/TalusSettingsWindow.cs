@@ -207,25 +207,25 @@ namespace TalusSettings.Editor
         }
 
 #region VALIDATIONS
-        private bool IsSceneValid(SceneReference scene)
-        {
-            return scene != null && !scene.IsEmpty;
-        }
-
         private bool IsSceneCollectionValid(SceneCollection collection)
         {
             if (collection == null) { return false; }
 
-            int badSceneReferenceCount = 0;
+            int badReferenceCount = 0;
             collection.ForEach(sceneReference =>
             {
-                if (sceneReference == null || sceneReference.IsEmpty)
+                if (!IsSceneValid(sceneReference))
                 {
-                    ++badSceneReferenceCount;
+                    ++badReferenceCount;
                 }
             });
 
-            return collection.Count > 0 && badSceneReferenceCount == 0;
+            return collection.Count > 0 && badReferenceCount == 0;
+        }
+
+        private bool IsSceneValid(SceneReference scene)
+        {
+            return scene != null && !scene.IsEmpty;
         }
 #endregion
     }
