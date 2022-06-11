@@ -12,6 +12,7 @@ namespace TalusSettings.Editor.Definitions
     internal class ProjectSettingsProvider : BaseSettingsProvider<ProjectSettingsProvider>
     {
         private SerializedObject _SerializedObject;
+        public override SerializedObject SerializedObject => _SerializedObject;
 
         [SettingsProvider]
         public static SettingsProvider CreateProjectSettingsProvider()
@@ -34,10 +35,10 @@ namespace TalusSettings.Editor.Definitions
 
         public override void OnGUI(string searchContext)
         {
+            _SerializedObject.Update();
+
             EditorGUILayout.BeginVertical();
             {
-                _SerializedObject.Update();
-
                 Color defaultColor = GUI.color;
                 GUI.backgroundColor = Color.yellow;
                 EditorGUILayout.HelpBox(
@@ -49,23 +50,6 @@ namespace TalusSettings.Editor.Definitions
                     true
                 );
                 GUI.backgroundColor = defaultColor;
-
-                GUILayout.Space(8);
-                EditorGUI.BeginChangeCheck();
-                GUI.enabled = !UnlockPanel;
-                {
-
-                    SerializedProperty serializedProperty = _SerializedObject.GetIterator();
-                    while (serializedProperty.NextVisible(true))
-                    {
-                        if (serializedProperty.name == "m_Script") { continue; }
-
-                        serializedProperty.stringValue = EditorGUILayout.TextField(
-                            GetLabel(serializedProperty.displayName),
-                            serializedProperty.stringValue
-                        );
-                    }
-                }
 
                 // unlock button
                 base.OnGUI(searchContext);
