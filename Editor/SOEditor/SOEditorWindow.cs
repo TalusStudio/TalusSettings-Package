@@ -35,7 +35,7 @@ namespace TalusSettings.Editor.SOEditor
             tree.AddAllAssetsAtPath("# Collections", settingsHolder.SOPath, typeof(ICollection), true, true)
                 .AddThumbnailIcons()
                 .SortMenuItemsByName();
-            tree.AddAllAssetsAtPath("# Events", settingsHolder.SOPath, typeof(IGameEvent), true, true)
+            tree.AddAllAssetsAtPath("# Events", settingsHolder.SOPath, typeof(IBaseEvent), true, true)
                 .AddThumbnailIcons()
                 .SortMenuItemsByName();
             tree.AddAllAssetsAtPath(" # Variables", settingsHolder.SOPath, typeof(BaseValue), true, true)
