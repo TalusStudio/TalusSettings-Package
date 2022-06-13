@@ -6,7 +6,7 @@ using Sirenix.OdinInspector.Editor;
 using TalusFramework.Base;
 using TalusFramework.Managers.Interfaces;
 using TalusFramework.Collections.Interfaces;
-using TalusFramework.Events;
+using TalusFramework.Events.Interfaces;
 
 using TalusSettings.Editor.Definitions;
 
@@ -35,7 +35,7 @@ namespace TalusSettings.Editor.SOEditor
             tree.AddAllAssetsAtPath("# Collections", settingsHolder.SOPath, typeof(ICollection), true, true)
                 .AddThumbnailIcons()
                 .SortMenuItemsByName();
-            tree.AddAllAssetsAtPath("# Events", settingsHolder.SOPath, typeof(GameEvent), true, true)
+            tree.AddAllAssetsAtPath("# Events", settingsHolder.SOPath, typeof(IGameEvent), true, true)
                 .AddThumbnailIcons()
                 .SortMenuItemsByName();
             tree.AddAllAssetsAtPath(" # Variables", settingsHolder.SOPath, typeof(BaseValue), true, true)
