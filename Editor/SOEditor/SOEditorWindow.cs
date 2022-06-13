@@ -29,7 +29,7 @@ namespace TalusSettings.Editor.SOEditor
 
             var tree = new OdinMenuTree(false);
             tree.Config.DrawSearchToolbar = true;
-            tree.AddAllAssetsAtPath("# Managers", settingsHolder.SOPath, typeof(IInitializable), true, true)
+            tree.AddAllAssetsAtPath("# Managers", settingsHolder.SOPath, typeof(IInitable), true, true)
                 .AddThumbnailIcons()
                 .SortMenuItemsByName();
             tree.AddAllAssetsAtPath("# Collections", settingsHolder.SOPath, typeof(ICollection), true, true)
