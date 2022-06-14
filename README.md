@@ -1,8 +1,4 @@
-# 🔨 TalusSettings Package
-
-# ❗ Dependencies
-- [TalusFramework Package](https://github.com/TalusStudio/TalusFramework-Package)
-- [TalusBackendData Package](https://github.com/TalusStudio/TalusBackendData-Package)
+# [![](https://img.shields.io/github/package-json/displayName/talusstudio/talussettings-package?label=Package%3A)](https://github.com/TalusStudio/TalusSettings-Package)
 
 # 💿 Installation
 - In Unity, 
