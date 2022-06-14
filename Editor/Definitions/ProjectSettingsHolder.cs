@@ -19,10 +19,7 @@ namespace TalusSettings.Editor.Definitions
         public static string ProviderPath => _ProviderPath;
 
         private const string s_BasePath = "Assets/";
-        public static string BasePath
-        {
-            get { return s_BasePath; }
-        }
+        public static string BasePath => s_BasePath;
 
         [SerializeField]
         private string _SOPath = $"{BasePath}ScriptableObjects/";
