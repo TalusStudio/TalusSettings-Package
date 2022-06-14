@@ -25,7 +25,7 @@ namespace TalusSettings.Editor.Definitions
         private string _SOPath = $"{BasePath}ScriptableObjects/";
         public string SOPath
         {
-            get { return _SOPath; }
+            get => _SOPath;
             set
             {
                 _SOPath = value;
@@ -34,11 +34,12 @@ namespace TalusSettings.Editor.Definitions
         }
 
         // Keys root path. (facebook settings and elephant settings)
+        // Facebook Settings is not affected by the path change (Singleton Scriptable).
         [SerializeField]
         private string _KeysPath = $"{BasePath}Resources/";
         public string KeysPath
         {
-            get { return _KeysPath; }
+            get => _KeysPath;
             set
             {
                 _KeysPath = value;
@@ -46,12 +47,12 @@ namespace TalusSettings.Editor.Definitions
             }
         }
 
-        // To copy elephant scene from packages.
+        // To copy Elephant Scene from packages.
         [SerializeField]
         private string _ElephantSceneSource = default;
         public string ElephantSceneSource
         {
-            get { return _ElephantSceneSource; }
+            get => _ElephantSceneSource;
             set
             {
                 _ElephantSceneSource = value;
@@ -63,7 +64,7 @@ namespace TalusSettings.Editor.Definitions
         private string _ElephantScenePath = $"{BasePath}Scenes/Template_Persistent/Scene_Elephant.unity";
         public string ElephantScenePath
         {
-            get { return _ElephantScenePath; }
+            get => _ElephantScenePath;
             set
             {
                 _ElephantScenePath = value;
@@ -75,7 +76,7 @@ namespace TalusSettings.Editor.Definitions
         private string _ForwarderScenePath = $"{BasePath}Scenes/Template_Persistent/Scene_Forwarder.unity";
         public string ForwarderScenePath
         {
-            get { return _ForwarderScenePath; }
+            get => _ForwarderScenePath;
             set
             {
                 _ForwarderScenePath = value;
@@ -87,7 +88,7 @@ namespace TalusSettings.Editor.Definitions
         private string _ElephantAssetName = "ElephantSettings";
         public string ElephantAssetName
         {
-            get { return _ElephantAssetName; }
+            get => _ElephantAssetName;
             set
             {
                 _ElephantAssetName = value;
@@ -99,7 +100,7 @@ namespace TalusSettings.Editor.Definitions
         private string _FacebookAssetName = "FacebookSettings";
         public string FacebookAssetName
         {
-            get { return _FacebookAssetName; }
+            get => _FacebookAssetName;
             set
             {
                 _FacebookAssetName = value;
@@ -107,15 +108,9 @@ namespace TalusSettings.Editor.Definitions
             }
         }
 
-        public string GetKeyPath(string assetName)
-        {
-            return System.IO.Path.Combine(KeysPath, assetName);
-        }
+        public string GetKeyPath(string assetName) => System.IO.Path.Combine(KeysPath, assetName);
 
-        public void SaveSettings()
-        {
-            Save(true);
-        }
+        public void SaveSettings() => Save(true);
 
         private void OnEnable()
         {
