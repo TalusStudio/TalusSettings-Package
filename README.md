@@ -1,4 +1,4 @@
-# 🔨 TalusSettings Package
+# [![](https://img.shields.io/github/package-json/displayName/talusstudio/talussettings-package?label=Package%3A)](https://github.com/TalusStudio/TalusSettings-Package)
 
 # 💿 Installation
 - In Unity, 
