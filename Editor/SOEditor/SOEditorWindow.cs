@@ -14,7 +14,7 @@ namespace TalusSettings.Editor.SOEditor
 {
     internal class SOEditorWindow : OdinMenuEditorWindow
     {
-        [MenuItem("TalusKit/SO Editor %m", false, -9000)]
+        [MenuItem("TalusKit/SO Editor %m", priority = 21)]
         private static void OpenWindow()
         {
             var window = GetWindow<SOEditorWindow>();
