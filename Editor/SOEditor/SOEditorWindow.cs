@@ -6,7 +6,7 @@ using Sirenix.OdinInspector.Editor;
 using TalusFramework.Base;
 using TalusFramework.Managers.Interfaces;
 using TalusFramework.Collections.Interfaces;
-using TalusFramework.Events;
+using TalusFramework.Events.Interfaces;
 
 using TalusSettings.Editor.Definitions;
 
@@ -14,7 +14,7 @@ namespace TalusSettings.Editor.SOEditor
 {
     internal class SOEditorWindow : OdinMenuEditorWindow
     {
-        [MenuItem("TalusKit/SO Editor %m", false, -9000)]
+        [MenuItem("TalusKit/SO Editor %m", priority = 21)]
         private static void OpenWindow()
         {
             var window = GetWindow<SOEditorWindow>();
@@ -29,13 +29,13 @@ namespace TalusSettings.Editor.SOEditor
 
             var tree = new OdinMenuTree(false);
             tree.Config.DrawSearchToolbar = true;
-            tree.AddAllAssetsAtPath("# Managers", settingsHolder.SOPath, typeof(IInitializable), true, true)
+            tree.AddAllAssetsAtPath("# Managers", settingsHolder.SOPath, typeof(IInitable), true, true)
                 .AddThumbnailIcons()
                 .SortMenuItemsByName();
             tree.AddAllAssetsAtPath("# Collections", settingsHolder.SOPath, typeof(ICollection), true, true)
                 .AddThumbnailIcons()
                 .SortMenuItemsByName();
-            tree.AddAllAssetsAtPath("# Events", settingsHolder.SOPath, typeof(GameEvent), true, true)
+            tree.AddAllAssetsAtPath("# Events", settingsHolder.SOPath, typeof(IBaseEvent), true, true)
                 .AddThumbnailIcons()
                 .SortMenuItemsByName();
             tree.AddAllAssetsAtPath(" # Variables", settingsHolder.SOPath, typeof(BaseValue), true, true)

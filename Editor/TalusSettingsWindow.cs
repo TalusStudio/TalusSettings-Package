@@ -109,7 +109,7 @@ namespace TalusSettings.Editor
             _ForwarderScene = new SceneReference(ProjectSettingsHolder.instance.ForwarderScenePath);
         }
 
-        [MenuItem("TalusKit/Backend/Build Settings", false, 10001)]
+        [MenuItem("TalusBackend/Build Settings", false, 10001)]
         private static void OpenWindow()
         {
             if (string.IsNullOrEmpty(BackendSettingsHolder.instance.ApiUrl))
