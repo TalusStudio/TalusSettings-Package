@@ -18,10 +18,9 @@ using TalusFramework.Collections;
 namespace TalusSettings.Editor
 {
     /// <summary>
-    ///     Window Path on Unity3D: 'TalusKit/Backend/App Settings'.
     ///     To update project settings with backend data.
-    ///     Updates product name and ios bundle id.
-    ///     Create/Update FB and Elephant SDK keys.
+    ///     1. Updates product name and ios bundle id.
+    ///     2. Create/Update FB and Elephant SDK keys.
     /// </summary>
     ///
     [DetailedInfoBox(
