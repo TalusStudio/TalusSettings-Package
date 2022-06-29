@@ -143,7 +143,7 @@ namespace TalusSettings.Editor
 
         private static void OpenDashboardUrl()
         {
-            Application.OpenURL("http://34.252.141.173/dashboard");
+            Application.OpenURL($"{BackendSettingsHolder.instance.ApiUrl}/dashboard");
         }
 
         private static void CreateSceneCollection()
