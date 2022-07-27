@@ -22,7 +22,7 @@ namespace TalusSettings.Editor.Definitions
         public static string BasePath => s_BasePath;
 
         [SerializeField]
-        private string _SOPath = $"{BasePath}ScriptableObjects/";
+        private string _SOPath = $"{BasePath}Scriptables/";
         public string SOPath
         {
             get => _SOPath;
