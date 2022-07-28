@@ -6,51 +6,41 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 
-using TalusSettings.Editor.Definitions;
-
 using TalusBackendData.Editor;
 using TalusBackendData.Editor.Models;
 using TalusBackendData.Editor.Utility;
 
 using TalusFramework.Utility;
-using TalusFramework.Collections;
+
+#if ENABLE_BACKEND
+using TalusSettings.Editor.Definitions;
+#endif
 
 namespace TalusSettings.Editor
 {
     /// <summary>
     ///     To update project settings with backend data.
     ///     1. Updates product name and ios bundle id.
-    ///     2. Create/Update FB and Elephant SDK keys.
+    ///     2. Create/Update FB and publisher's SDK keys.
     /// </summary>
     ///
     [DetailedInfoBox(
         "Click here for details!",
         "Talus Studio/Prototype - Build Settings\n\n" +
-        "This window makes all the necessary changes to properly upload the project to TestFlight.\n\n" +
-        "NOTE: If you create new Level Collection, don't forget to reference that new collection in Runtime Data Manager scriptable object." +
-        "There is an editor window 'TalusKit/SO Editor' to inspect managers. (shortcut: CTRL + M)"
+        "This window makes all the necessary changes to properly upload the project to TestFlight.\n\n"
     )]
     internal class TalusSettingsWindow : OdinEditorWindow
     {
-#if ENABLE_BACKEND
-        private SceneReference _ElephantScene;
+        private SceneReference _SDKScene;
 
         [LabelWidth(120)]
         [ShowInInspector]
         [HideReferenceObjectPicker]
-        public SceneReference ElephantScene
+        public SceneReference SDKScene
         {
-            get { return _ElephantScene; }
+            get { return _SDKScene; }
             set { }
         }
-#endif
-
-        [LabelWidth(120)]
-        [InlineButton(nameof(CreateSceneCollection), Label = "Create")]
-        [PropertyOrder(998)]
-        [PropertySpace(SpaceBefore = 16)]
-        [Required]
-        public SceneCollection LevelCollection;
 
         [LabelWidth(120)]
         [ShowInInspector, Required]
@@ -65,18 +55,12 @@ namespace TalusSettings.Editor
         public void UpdateProjectSettings()
         {
 #if ENABLE_BACKEND
-            if (!IsSceneValid(ElephantScene))
+            if (!IsSceneValid(SDKScene))
             {
-                InfoBox.Show("Error :(", $"{nameof(ElephantScene)} cannot be null!", "OK, I understand");
+                InfoBox.Show("Error :(", $"{nameof(SDKScene)} cannot be null!", "OK, I understand");
                 return;
             }
 #endif
-
-            if (!IsSceneCollectionValid(LevelCollection))
-            {
-                InfoBox.Show("Error :(", $"There is/are invalid scene reference(s) in {nameof(LevelCollection)}.", "OK, I understand");
-                return;
-            }
 
             BackendApi api = new BackendApi(BackendSettingsHolder.instance.ApiUrl, BackendSettingsHolder.instance.ApiToken);
             api.GetAppInfo(AppID, UpdateBackendData);
@@ -86,7 +70,7 @@ namespace TalusSettings.Editor
         private void InitWindow()
         {
 #if ENABLE_BACKEND
-            _ElephantScene = new SceneReference(ProjectSettingsHolder.instance.ElephantScenePath);
+            _SDKScene = new SceneReference(ProjectSettingsHolder.instance.SDKScenePath);
 #endif
         }
 
@@ -128,11 +112,6 @@ namespace TalusSettings.Editor
             Application.OpenURL($"{BackendSettingsHolder.instance.ApiUrl}/dashboard");
         }
 
-        private static void CreateSceneCollection()
-        {
-            Debug.LogError("Not implemented!");
-        }
-
         private void UpdateBackendData(AppModel app)
         {
             UpdateSceneSettings();
@@ -145,11 +124,13 @@ namespace TalusSettings.Editor
                 return;
             }
 
-            if (!AppSettings.AppSettings.UpdateElephantAsset(app))
+            /*
+            if (!AppSettings.AppSettings.UpdateSDKAsset(app))
             {
-                InfoBox.Show("Error !", $"Elephant settings couldn't updated!", "OK");
+                InfoBox.Show("Error !", $"SDK settings couldn't updated!", "OK");
                 return;
             }
+            */
 #endif
 
             InfoBox.Show("Success !", $"App settings updated!\n\n{app}", "OK");
@@ -158,6 +139,7 @@ namespace TalusSettings.Editor
         private void UpdateProductSettings(AppModel app)
         {
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, app.app_bundle);
+            PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, app.app_bundle);
             PlayerSettings.productName = app.app_name;
 
             SaveAssets();
@@ -168,13 +150,8 @@ namespace TalusSettings.Editor
             var scenes = new List<EditorBuildSettingsScene>();
 
 #if ENABLE_BACKEND
-            scenes.Add(new EditorBuildSettingsScene(ElephantScene.ScenePath, true));
+            scenes.Add(new EditorBuildSettingsScene(SDKScene.ScenePath, true));
 #endif
-
-            for (int i = 0; i < LevelCollection.Count; ++i)
-            {
-                scenes.Add(new EditorBuildSettingsScene(LevelCollection[i].ScenePath, true));
-            }
 
             EditorBuildSettings.scenes = scenes.ToArray();
             SaveAssets();
@@ -187,22 +164,6 @@ namespace TalusSettings.Editor
         }
 
 #region VALIDATIONS
-        private bool IsSceneCollectionValid(SceneCollection collection)
-        {
-            if (collection == null) { return false; }
-
-            int badReferenceCount = 0;
-            collection.ForEach(sceneReference =>
-            {
-                if (!IsSceneValid(sceneReference))
-                {
-                    ++badReferenceCount;
-                }
-            });
-
-            return collection.Count > 0 && badReferenceCount == 0;
-        }
-
         private bool IsSceneValid(SceneReference scene)
         {
             return scene != null && !scene.IsEmpty;

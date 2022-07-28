@@ -38,26 +38,6 @@ namespace TalusSettings.Editor.AppSettings
             return true;
         }
 
-        public static bool UpdateElephantAsset(AppModel app)
-        {
-            var elephantSettings = Resources.Load<ElephantSettings>(ProjectSettingsHolder.instance.ElephantAssetName);
-            if (elephantSettings == null)
-            {
-                Debug.LogError("[TalusSettings-Package] Elephant Settings can not found!");
-                return false;
-            }
-
-            elephantSettings.GameID = app.elephant_id;
-            elephantSettings.GameSecret = app.elephant_secret;
-            EditorUtility.SetDirty(elephantSettings);
-            SaveAssets();
-
-            if (string.IsNullOrEmpty(app.elephant_id)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_ID is empty!"); }
-            if (string.IsNullOrEmpty(app.elephant_secret)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_Secret is empty!"); }
-
-            return true;
-        }
-
         [UnityEditor.Callbacks.DidReloadScripts]
         private static void CreateBackendAssets()
         {
@@ -75,9 +55,8 @@ namespace TalusSettings.Editor.AppSettings
                     return;
                 }
 
-                CopyElephantScene();
+                CopySDKScene();
                 CreateFacebookAsset();
-                CreateElephantAsset();
             };
         }
 
@@ -90,17 +69,17 @@ namespace TalusSettings.Editor.AppSettings
             return Directory.Exists(path);
         }
 
-        private static void CopyElephantScene()
+        private static void CopySDKScene()
         {
             try
             {
                 FileUtil.CopyFileOrDirectory(
-                    ProjectSettingsHolder.instance.ElephantSceneSource,
-                    ProjectSettingsHolder.instance.ElephantScenePath
+                    ProjectSettingsHolder.instance.SDKSceneSource,
+                    ProjectSettingsHolder.instance.SDKScenePath
                 );
 
                 SaveAssets();
-                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {ProjectSettingsHolder.instance.ElephantScenePath}");
+                Debug.Log($"[TalusSettings-Package] elephant_scene copied to: {ProjectSettingsHolder.instance.SDKScenePath}");
             }
             catch (Exception)
             {
@@ -119,22 +98,46 @@ namespace TalusSettings.Editor.AppSettings
             Debug.Log($"[TalusSettings-Package] {fullPath} created!");
         }
 
-        private static void CreateElephantAsset()
-        {
-            ElephantSettings settings = Resources.Load<ElephantSettings>(ProjectSettingsHolder.instance.ElephantAssetName);
-            if (settings != null) { return; }
-
-            string fullPath = ProjectSettingsHolder.instance.GetKeyPath($"{ProjectSettingsHolder.instance.ElephantAssetName}.asset");
-            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<ElephantSettings>(), AssetDatabase.GenerateUniqueAssetPath(fullPath));
-            SaveAssets();
-
-            Debug.Log($"[TalusSettings-Package] {fullPath} created!");
-        }
-
         private static void SaveAssets()
         {
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+
+        /*
+        private static void CreateSDKAsset()
+        {
+            ElephantSettings settings = Resources.Load<ElephantSettings>(ProjectSettingsHolder.instance.SDKAssetName);
+            if (settings != null) { return; }
+
+            string fullPath = ProjectSettingsHolder.instance.GetKeyPath($"{ProjectSettingsHolder.instance.SDKAssetName}.asset");
+            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<ElephantSettings>(), AssetDatabase.GenerateUniqueAssetPath(fullPath));
+            SaveAssets();
+
+            Debug.Log($"[TalusSettings-Package] {fullPath} created!");
+        }
+        */
+
+        /*
+        public static bool UpdateSDKAsset(AppModel app)
+        {
+            var elephantSettings = Resources.Load<ElephantSettings>(ProjectSettingsHolder.instance.SDKAssetName);
+            if (elephantSettings == null)
+            {
+                Debug.LogError("[TalusSettings-Package] Elephant Settings can not found!");
+                return false;
+            }
+
+            elephantSettings.GameID = app.elephant_id;
+            elephantSettings.GameSecret = app.elephant_secret;
+            EditorUtility.SetDirty(elephantSettings);
+            SaveAssets();
+
+            if (string.IsNullOrEmpty(app.elephant_id)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_ID is empty!"); }
+            if (string.IsNullOrEmpty(app.elephant_secret)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_Secret is empty!"); }
+
+            return true;
+        }
+        */
     }
 }
