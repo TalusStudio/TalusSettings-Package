@@ -43,7 +43,7 @@ namespace TalusSettings.Editor
         private void InitWindow()
         { }
 
-        [MenuItem("TalusBackend/Build Settings", false, 10001)]
+        [MenuItem("TalusBackend/Build Settings", false, 10999)]
         private static void OpenWindow()
         {
             if (string.IsNullOrEmpty(BackendSettingsHolder.instance.ApiUrl))
