@@ -50,13 +50,13 @@ namespace TalusSettings.Editor.SOEditor
             ).AddThumbnailIcons();
 
             tree.AddAssetAtPath(
-                "# Backend/Elephant Settings",
-                settingsHolder.GetKeyPath($"{settingsHolder.ElephantAssetName}.asset"),
+                "# Backend/SDK Settings",
+                settingsHolder.GetKeyPath($"{settingsHolder.SDKAssetName}.asset"),
                 typeof(ScriptableObject)
             ).AddThumbnailIcons();
 #else
             tree.Add("# Backend (not active)/Facebook Settings", null);
-            tree.Add("# Backend (not active)/Elephant Settings", null);
+            tree.Add("# Backend (not active)/SDK Settings", null);
 #endif
 
             return tree;

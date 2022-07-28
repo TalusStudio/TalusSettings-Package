@@ -45,39 +45,39 @@ namespace TalusSettings.Editor.Definitions
             }
         }
 
-        // To copy Elephant Scene from packages.
+        // To copy SDK Scene from packages.
         [SerializeField]
-        private string _ElephantSceneSource = default;
-        public string ElephantSceneSource
+        private string _SDKSceneSource = default;
+        public string SDKSceneSource
         {
-            get => _ElephantSceneSource;
+            get => _SDKSceneSource;
             set
             {
-                _ElephantSceneSource = value;
+                _SDKSceneSource = value;
                 SaveSettings();
             }
         }
 
         [SerializeField]
-        private string _ElephantScenePath = $"{BasePath}Scenes/Template_Persistent/Scene_Elephant.unity";
-        public string ElephantScenePath
+        private string _SDKScenePath = $"{BasePath}Scenes/Scene_SDK.unity";
+        public string SDKScenePath
         {
-            get => _ElephantScenePath;
+            get => _SDKScenePath;
             set
             {
-                _ElephantScenePath = value;
+                _SDKScenePath = value;
                 SaveSettings();
             }
         }
 
         [SerializeField]
-        private string _ElephantAssetName = "ElephantSettings";
-        public string ElephantAssetName
+        private string _SDKAssetName = "ElephantSettings";
+        public string SDKAssetName
         {
-            get => _ElephantAssetName;
+            get => _SDKAssetName;
             set
             {
-                _ElephantAssetName = value;
+                _SDKAssetName = value;
                 SaveSettings();
             }
         }
@@ -100,7 +100,7 @@ namespace TalusSettings.Editor.Definitions
 
         private void OnEnable()
         {
-            _ElephantSceneSource = $"Packages/com.talus.taluselephant/elephant_scene.unity";
+            _SDKSceneSource = $"Packages/com.talus.taluspublishing/Scene_SDK.unity";
         }
     }
 }
