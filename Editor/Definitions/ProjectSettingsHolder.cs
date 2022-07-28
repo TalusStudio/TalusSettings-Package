@@ -71,13 +71,13 @@ namespace TalusSettings.Editor.Definitions
         }
 
         [SerializeField]
-        private string _SDKAssetName = "ElephantSettings";
-        public string SDKAssetName
+        private string _GAAssetName = "GASettings";
+        public string GAAssetName
         {
-            get => _SDKAssetName;
+            get => _GAAssetName;
             set
             {
-                _SDKAssetName = value;
+                _GAAssetName = value;
                 SaveSettings();
             }
         }

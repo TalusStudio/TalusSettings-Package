@@ -105,7 +105,7 @@ namespace TalusSettings.Editor.AppSettings
         }
 
         /*
-        private static void CreateSDKAsset()
+        private static void CreateGAAsset()
         {
             ElephantSettings settings = Resources.Load<ElephantSettings>(ProjectSettingsHolder.instance.SDKAssetName);
             if (settings != null) { return; }
@@ -119,9 +119,9 @@ namespace TalusSettings.Editor.AppSettings
         */
 
         /*
-        public static bool UpdateSDKAsset(AppModel app)
+        public static bool UpdateGAAsset(AppModel app)
         {
-            var elephantSettings = Resources.Load<ElephantSettings>(ProjectSettingsHolder.instance.SDKAssetName);
+            var elephantSettings = Resources.Load<ElephantSettings>(ProjectSettingsHolder.instance.GAAssetName);
             if (elephantSettings == null)
             {
                 Debug.LogError("[TalusSettings-Package] Elephant Settings can not found!");
@@ -133,8 +133,8 @@ namespace TalusSettings.Editor.AppSettings
             EditorUtility.SetDirty(elephantSettings);
             SaveAssets();
 
-            if (string.IsNullOrEmpty(app.elephant_id)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_ID is empty!"); }
-            if (string.IsNullOrEmpty(app.elephant_secret)) { Debug.LogWarning("[TalusSettings-Package] Elephant Game_Secret is empty!"); }
+            if (string.IsNullOrEmpty(app.ga_id)) { Debug.LogWarning("[TalusSettings-Package] GA ID is empty!"); }
+            if (string.IsNullOrEmpty(app.ga_secret)) { Debug.LogWarning("[TalusSettings-Package] GA Secret is empty!"); }
 
             return true;
         }

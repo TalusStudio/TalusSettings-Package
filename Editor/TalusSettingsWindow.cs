@@ -106,9 +106,9 @@ namespace TalusSettings.Editor
             }
 
             /*
-            if (!AppSettings.AppSettings.UpdateSDKAsset(app))
+            if (!AppSettings.AppSettings.UpdateGAAsset(app))
             {
-                InfoBox.Show("Error !", $"SDK settings couldn't updated!", "OK");
+                InfoBox.Show("Error !", $"GA SDK settings couldn't updated!", "OK");
                 return;
             }
             */
