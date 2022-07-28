@@ -3,8 +3,7 @@
     "rootNamespace": "",
     "references": [
         "TalusSettings.Editor.Definitions",
-        "TalusBackendData.Editor",
-        "TalusElephant"
+        "TalusBackendData.Editor"
     ],
     "includePlatforms": [
         "Editor"
