@@ -1,8 +1,6 @@
 using UnityEditor;
 using UnityEngine;
 
-using TalusBackendData.Editor;
-
 namespace TalusSettings.Editor.Definitions
 {
     /// <summary>
@@ -114,7 +112,7 @@ namespace TalusSettings.Editor.Definitions
 
         private void OnEnable()
         {
-            _ElephantSceneSource = $"Packages/{BackendSettingsHolder.instance.Packages["talus-elephant"]}/elephant_scene.unity";
+            _ElephantSceneSource = $"Packages/com.talus.taluselephant/elephant_scene.unity";
         }
     }
 }
