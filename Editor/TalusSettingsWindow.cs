@@ -45,17 +45,6 @@ namespace TalusSettings.Editor
         }
 #endif
 
-        private SceneReference _ForwarderScene;
-
-        [LabelWidth(120)]
-        [ShowInInspector]
-        [HideReferenceObjectPicker]
-        public SceneReference ForwarderScene
-        {
-            get { return _ForwarderScene; }
-            set { }
-        }
-
         [LabelWidth(120)]
         [InlineButton(nameof(CreateSceneCollection), Label = "Create")]
         [PropertyOrder(998)]
@@ -83,12 +72,6 @@ namespace TalusSettings.Editor
             }
 #endif
 
-            if (!IsSceneValid(ForwarderScene))
-            {
-                InfoBox.Show("Error :(", $"{nameof(ForwarderScene)} cannot be null!", "OK, I understand");
-                return;
-            }
-
             if (!IsSceneCollectionValid(LevelCollection))
             {
                 InfoBox.Show("Error :(", $"There is/are invalid scene reference(s) in {nameof(LevelCollection)}.", "OK, I understand");
@@ -105,7 +88,6 @@ namespace TalusSettings.Editor
 #if ENABLE_BACKEND
             _ElephantScene = new SceneReference(ProjectSettingsHolder.instance.ElephantScenePath);
 #endif
-            _ForwarderScene = new SceneReference(ProjectSettingsHolder.instance.ForwarderScenePath);
         }
 
         [MenuItem("TalusBackend/Build Settings", false, 10001)]
@@ -188,7 +170,6 @@ namespace TalusSettings.Editor
 #if ENABLE_BACKEND
             scenes.Add(new EditorBuildSettingsScene(ElephantScene.ScenePath, true));
 #endif
-            scenes.Add(new EditorBuildSettingsScene(ForwarderScene.ScenePath, true));
 
             for (int i = 0; i < LevelCollection.Count; ++i)
             {
