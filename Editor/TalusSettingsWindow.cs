@@ -10,8 +10,6 @@ using TalusBackendData.Editor;
 using TalusBackendData.Editor.Models;
 using TalusBackendData.Editor.Utility;
 
-using TalusFramework.Utility;
-
 #if ENABLE_BACKEND
 using TalusSettings.Editor.Definitions;
 #endif
@@ -20,28 +18,17 @@ namespace TalusSettings.Editor
 {
     /// <summary>
     ///     To update project settings with backend data.
-    ///     1. Updates product name and ios bundle id.
-    ///     2. Create/Update FB and publisher's SDK keys.
+    ///     1. Updates product name and bundle id.
+    ///     2. Create/Update FB and GA SDK keys.
     /// </summary>
     ///
     [DetailedInfoBox(
         "Click here for details!",
         "Talus Studio/Prototype - Build Settings\n\n" +
-        "This window makes all the necessary changes to properly upload the project to TestFlight.\n\n"
+        "This window makes all the necessary changes to properly upload the project to TestFlight and Google Play.\n\n"
     )]
     internal class TalusSettingsWindow : OdinEditorWindow
     {
-        private SceneReference _SDKScene;
-
-        [LabelWidth(120)]
-        [ShowInInspector]
-        [HideReferenceObjectPicker]
-        public SceneReference SDKScene
-        {
-            get { return _SDKScene; }
-            set { }
-        }
-
         [LabelWidth(120)]
         [ShowInInspector, Required]
         [InlineButton(nameof(OpenDashboardUrl), Label = "Get ID ")]
@@ -52,27 +39,9 @@ namespace TalusSettings.Editor
             set { BackendSettingsHolder.instance.AppId = value; }
         }
 
-        public void UpdateProjectSettings()
-        {
-#if ENABLE_BACKEND
-            if (!IsSceneValid(SDKScene))
-            {
-                InfoBox.Show("Error :(", $"{nameof(SDKScene)} cannot be null!", "OK, I understand");
-                return;
-            }
-#endif
-
-            BackendApi api = new BackendApi(BackendSettingsHolder.instance.ApiUrl, BackendSettingsHolder.instance.ApiToken);
-            api.GetAppInfo(AppID, UpdateBackendData);
-        }
-
         [OnInspectorInit]
         private void InitWindow()
-        {
-#if ENABLE_BACKEND
-            _SDKScene = new SceneReference(ProjectSettingsHolder.instance.SDKScenePath);
-#endif
-        }
+        { }
 
         [MenuItem("TalusBackend/Build Settings", false, 10001)]
         private static void OpenWindow()
@@ -107,16 +76,28 @@ namespace TalusSettings.Editor
             };
         }
 
-        private static void OpenDashboardUrl()
+        public void UpdateProjectSettings()
         {
-            Application.OpenURL($"{BackendSettingsHolder.instance.ApiUrl}/dashboard");
+            BackendApi api = new(BackendSettingsHolder.instance.ApiUrl, BackendSettingsHolder.instance.ApiToken);
+            api.GetAppInfo(AppID, (app) =>
+            {
+                UpdateProductSettings(app);
+                UpdateBackendKeys(app);
+                InfoBox.Show("Success !", $"App settings updated!\n\n{app}", "OK");
+            });
         }
 
-        private void UpdateBackendData(AppModel app)
+        private void UpdateProductSettings(AppModel app)
         {
-            UpdateSceneSettings();
-            UpdateProductSettings(app);
+            PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, app.app_bundle);
+            PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, app.app_bundle);
+            PlayerSettings.productName = app.app_name;
 
+            SaveAssets();
+        }
+
+        private void UpdateBackendKeys(AppModel app)
+        {
 #if ENABLE_BACKEND
             if (!AppSettings.AppSettings.UpdateFacebookAsset(app))
             {
@@ -132,29 +113,11 @@ namespace TalusSettings.Editor
             }
             */
 #endif
-
-            InfoBox.Show("Success !", $"App settings updated!\n\n{app}", "OK");
         }
 
-        private void UpdateProductSettings(AppModel app)
+        private static void OpenDashboardUrl()
         {
-            PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, app.app_bundle);
-            PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, app.app_bundle);
-            PlayerSettings.productName = app.app_name;
-
-            SaveAssets();
-        }
-
-        private void UpdateSceneSettings()
-        {
-            var scenes = new List<EditorBuildSettingsScene>();
-
-#if ENABLE_BACKEND
-            scenes.Add(new EditorBuildSettingsScene(SDKScene.ScenePath, true));
-#endif
-
-            EditorBuildSettings.scenes = scenes.ToArray();
-            SaveAssets();
+            Application.OpenURL($"{BackendSettingsHolder.instance.ApiUrl}/dashboard");
         }
 
         private static void SaveAssets()
@@ -162,12 +125,5 @@ namespace TalusSettings.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
-
-#region VALIDATIONS
-        private bool IsSceneValid(SceneReference scene)
-        {
-            return scene != null && !scene.IsEmpty;
-        }
-#endregion
     }
 }
