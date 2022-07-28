@@ -71,18 +71,6 @@ namespace TalusSettings.Editor.Definitions
         }
 
         [SerializeField]
-        private string _ForwarderScenePath = $"{BasePath}Scenes/Template_Persistent/Scene_Forwarder.unity";
-        public string ForwarderScenePath
-        {
-            get => _ForwarderScenePath;
-            set
-            {
-                _ForwarderScenePath = value;
-                SaveSettings();
-            }
-        }
-
-        [SerializeField]
         private string _ElephantAssetName = "ElephantSettings";
         public string ElephantAssetName
         {
